@@ -1,0 +1,31 @@
+services:
+  db_movie:
+    image: postgres:latest
+    container_name: db_movie
+    environment:
+     POSTGRES_DB: ${DATABASE_NAME}
+     POSTGRES_USER: ${DATABASE_USERNAME}
+     POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  django_movie:
+    container_name: django_movie
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - db_movie
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+volumes:
+  postgres_data:
