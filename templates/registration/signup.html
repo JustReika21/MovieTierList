@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <title>Sign up</title>
+    <link rel="stylesheet" href="{% static 'css/registration/signup.css' %}">
+    
+    <div class="signup-page">
+        <div class="signup-card">
+            <h3 class="signup-title">Регистрация</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.errors }}
+                <div class="form-group">
+                    <label for="username">Никнейм</label>
+                    <input type="text" name="username" placeholder="Никнейм" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="email">Адрес электронной почты</label>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Пароль</label>
+                    <input type="password" name="password1" placeholder="Пароль" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Подтверждение пароля</label>
+                    <input type="password" name="password2" placeholder="Подтвердите пароль" required>
+                </div>
+                <button type="submit" class="signup-button">Зарегистрироваться</button>
+            </form>
+            <p class="login-link">
+                Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
