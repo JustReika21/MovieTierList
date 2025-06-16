@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Luxora Grotesk';
+    src: url('static/fonts/luxora/LuxoraGrotesk-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Luxora Grotesk', sans-serif;
+}

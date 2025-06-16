@@ -7,6 +7,7 @@ from movie_tier_list import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),
+    path('', include('core.urls')),
 ]
 
 if settings.DEBUG:
