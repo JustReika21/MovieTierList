@@ -6,22 +6,22 @@
 
     <div class="login-page">
         <div class="login-card">
-            <h3 class="login-title">Вход</h3>
+            <h3 class="login-title">Login</h3>
             <form method="post">
                 {% csrf_token %}
                 {{ form.errors }}
                 <div class="form-group">
-                    <label for="username">Никнейм</label>
-                    <input type="text" name="username" placeholder="Никнейм" required autofocus>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" placeholder="Username" required autofocus>
                 </div>
                 <div class="form-group">
-                    <label for="password">Пароль</label>
-                    <input type="password" name="password" placeholder="Пароль" required>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="login-button">Вход</button>
+                <button type="submit" class="login-button">Login</button>
             </form>
             <p class="signup-link">
-                Нет аккаунта? <a href="{% url 'accounts:signin' %}">Создать аккаунт</a>
+                Doesn't have an account? <a href="{% url 'accounts:signin' %}">Create an account</a>
             </p>
         </div>
     </div>
