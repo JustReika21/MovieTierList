@@ -6,8 +6,8 @@
             <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo-img">
         </a>
         <ul class="navbar-menu">
-            <li><a href="#">About</a></li>
             {% if request.user.is_authenticated %}
+                <li><a href="{% url 'user_profile:user_profile' request.user.username %}">Profile</a></li>
             	<li>
                     <form method="post" action="{% url 'accounts:logout' %}">
                         {% csrf_token %}
@@ -20,6 +20,7 @@
                 <li><a href="{% url 'accounts:login' %}">Login</a></li>
                 <li><a href="{% url 'accounts:signin' %}">Signin</a></li>
             {% endif %}
+            <li><a href="#">About</a></li>
         </ul>
     </div>
 </nav>
