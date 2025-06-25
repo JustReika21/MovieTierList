@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'accounts.apps.AccountsConfig',
+    'items.apps.ItemsConfig',
     'user_profile.apps.UserProfileConfig',
 ]
 
