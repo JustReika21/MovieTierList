@@ -8,7 +8,9 @@ from movie_tier_list import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),
+    path('api/', include('api.urls')),
     path('', include('core.urls')),
+    path('items/', include('items.urls')),
     path('profile/', include('user_profile.urls')),
 ]
 

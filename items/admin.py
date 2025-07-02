@@ -6,8 +6,7 @@ from items.models import Item, ItemTag
 
 @admin.register(ItemTag)
 class ItemTagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user')
-    list_display_links = ('name', 'user')
+    list_display = ('name',)
 
 
 @admin.register(Item)

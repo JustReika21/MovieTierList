@@ -1,24 +1,19 @@
 from PIL import Image
-from django import forms
-from django.core.exceptions import ValidationError
-from items.models import Item
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
+from items.models import Item
 
 IMG_FORMATS = ('jpg', 'jpeg', 'png')
 
 
-class ItemForm(forms.ModelForm):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['title', 'description', 'rating', 'cover', 'tags', 'user']
 
-    def clean_cover(self):
-        cover = self.cleaned_data['cover']
-
+    def validate_cover(self, cover):
         if not cover:
-            return
-
-        if type(cover) is str:
             return
 
         if cover.size > 4 * 1024 * 1024:
