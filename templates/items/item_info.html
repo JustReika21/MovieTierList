@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {{ item.title }}
+    {{ item.description }}
+
+    <form id="deleteForm" data-url="{% url 'api:item_delete' item.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+
+    <script src="{% static 'js/item/delete_item.js' %}"></script>
+
+{% endblock %}

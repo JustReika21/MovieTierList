@@ -1,5 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+    <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
     <title>{{ username }}</title>
     <h1>Profile: {{ username }}</h1>
+    <div class="profile-container">
+        {% for item in user_items %}
+            <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
+                <div class="item-card">
+                    <img src="{{ item.cover.url }}" alt="Обложка">
+                    <h2>{{ item.title }}</h2>
+                    <p>{{ item.description }}</p>
+                    <p><strong>Rating:</strong> {{ item.rating }}</p>
+                    <div class="item-tags">
+                    {% for tag in item.tags.all %}
+                        {% if forloop.last %}
+                            {{ tag }}
+                        {% else %}
+                            {{ tag }},
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="buttons">
+        <a href="{% url 'items:all_items' %}" class="manage-button">All items</a>
+        <a href="{% url 'items:create_item' %}" class="manage-button">Create item</a>
+    </div>
 {% endblock %}
