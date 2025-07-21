@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <form method="post" action="{% url 'api:item_create' %}" enctype="multipart/form-data">
+    <form 
+            id="createForm"
+            action="{% url 'api:item_create' %}"
+            data-redirect-url="{% url 'user_profile:user_profile' request.user.username %}"
+    >
         {% csrf_token %}
     
         <label for="id_title">Title:</label>
@@ -31,5 +35,6 @@
     
         <button type="submit">Save</button>
     </form>
+
     <script src="{% static 'js/item/create_item.js' %}"></script>
 {% endblock %}

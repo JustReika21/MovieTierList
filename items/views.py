@@ -25,7 +25,9 @@ def all_items(request):
 
 
 def item_info(request, item_id):
-    item = Item.objects.prefetch_related('tags').get(id=item_id)
+    item = Item.objects.prefetch_related(
+        'tags'
+    ).select_related('user').get(id=item_id)
     context = {
         'item': item,
     }

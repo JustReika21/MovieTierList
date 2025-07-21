@@ -4,7 +4,11 @@
     {{ item.title }}
     {{ item.description }}
 
-    <form id="deleteForm" data-url="{% url 'api:item_delete' item.id %}">
+    <form
+            id="deleteForm"
+            data-url="{% url 'api:item_delete' item.id %}"
+            data-redirect-url="{% url 'user_profile:user_profile' request.user.username %}"
+    >
         {% csrf_token %}
         <button type="submit">Delete</button>
     </form>

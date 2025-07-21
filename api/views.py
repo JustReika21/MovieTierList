@@ -21,9 +21,18 @@ class ItemDeleteAPIView(APIView):
         try:
             item = Item.objects.select_related('user').get(id=item_id)
             if item.user != request.user:
-                return Response(status=status.HTTP_403_FORBIDDEN)
+                return Response(
+                    {'message': 'You can\'t delete this item.'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
             item.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {'message': 'Item deleted successfully.'},
+                status=status.HTTP_204_NO_CONTENT
+            )
         except Item.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {'message': 'Item does not exist.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
 

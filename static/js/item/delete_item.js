@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const url = form.getAttribute("data-url");
+        const redirectUrl = form.getAttribute("data-redirect-url");
         const formData = new FormData(form);
         const csrfToken = formData.get("csrfmiddlewaretoken");
 
@@ -16,12 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             credentials: "same-origin"
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 200) {
-                // TODO: Redirect
+        .then(response => {
+            if (response.status === 204) {
+                window.location.href = redirectUrl;
             } else {
-                throw new Error("Delete failed");
+                return response.json().then(data => {
+                    throw new Error(data?.message || "Delete failed");
+                });
             }
         })
         .catch(error => {
