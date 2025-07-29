@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{{ collection.title }}
+<br>
+    {{ collection.user }}
+    {% if collection.user == request.user %}
+        <form
+                id="deleteForm"
+                data-url="{% url 'api:collection_delete' collection.id %}"
+                data-redirect-url="{% url 'user_profile:user_profile' collection.user.username %}"
+        >
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    {% endif %}
+    
+{% for item in collection.items.all %}
+	{{ item.title }}
+{% endfor %}
+    
+    <script src="{% static 'js/items/delete_item.js' %}"></script>
+{% endblock %}

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts.apps.AccountsConfig',
     'api.apps.ApiConfig',
+    'item_collections',
     'items.apps.ItemsConfig',
     'user_profile.apps.UserProfileConfig',
 ]

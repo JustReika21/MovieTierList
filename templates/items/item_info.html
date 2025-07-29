@@ -3,16 +3,18 @@
 {% block content %}
     {{ item.title }}
     {{ item.description }}
+    {{ item.user }}
+    {% if item.user == request.user %}
+        <form
+                id="deleteForm"
+                data-url="{% url 'api:item_delete' item.id %}"
+                data-redirect-url="{% url 'user_profile:user_profile' item.user.username %}"
+        >
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    {% endif %}
 
-    <form
-            id="deleteForm"
-            data-url="{% url 'api:item_delete' item.id %}"
-            data-redirect-url="{% url 'user_profile:user_profile' request.user.username %}"
-    >
-        {% csrf_token %}
-        <button type="submit">Delete</button>
-    </form>
-
-    <script src="{% static 'js/item/delete_item.js' %}"></script>
+    <script src="{% static 'js/items/delete_item.js' %}"></script>
 
 {% endblock %}

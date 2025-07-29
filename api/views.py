@@ -1,38 +1,54 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from api.serializers import ItemSerializer
+from api.serializers import ItemSerializer, CollectionSerializer
+from item_collections.models import Collection
 from items.models import Item
+from api.permissions import IsOwner
 
 
 class ItemCreateAPIView(APIView):
     def post(self, request):
         serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.user = request.user
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ItemDeleteAPIView(APIView):
-    def delete(self, request, item_id):
-        try:
-            item = Item.objects.select_related('user').get(id=item_id)
-            if item.user != request.user:
-                return Response(
-                    {'message': 'You can\'t delete this item.'},
-                    status=status.HTTP_403_FORBIDDEN
-                )
-            item.delete()
-            return Response(
-                {'message': 'Item deleted successfully.'},
-                status=status.HTTP_204_NO_CONTENT
-            )
-        except Item.DoesNotExist:
-            return Response(
-                {'message': 'Item does not exist.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
+    permission_classes = (IsOwner,)
 
+    def delete(self, request, item_id):
+        item = get_object_or_404(Item, id=item_id)
+        self.check_object_permissions(request, item)
+        item.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+
+class CollectionCreateAPIView(APIView):
+    def post(self, request):
+        serializer = CollectionSerializer(
+            data=request.data,
+            context={'request': request}
+        )
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CollectionDeleteAPIView(APIView):
+    permission_classes = (IsOwner,)
+
+    def delete(self, request, collection_id):
+        collection = get_object_or_404(Collection, id=collection_id)
+        self.check_object_permissions(request, collection)
+        collection.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
