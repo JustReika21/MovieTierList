@@ -17,7 +17,7 @@
         <label for="id_cover">Cover Image:</label>
         <input type="file" name="cover" id="id_cover">
         
-        <label for="id_items">Tags:</label>
+        <label for="id_items">Items:</label>
         <select name="items" id="id_items" multiple>
             {% for item in items %}
                 <option value="{{ item.id }}">{{ item.title }}</option>

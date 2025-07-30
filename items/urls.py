@@ -12,4 +12,9 @@ urlpatterns = [
         name='item_info'
     ),
     path('create/', views.create_item, name='create_item'),
+    path(
+        '<str:username>/update/<int:item_id>',
+        views.update_item,
+        name='update_item'
+    ),
 ]

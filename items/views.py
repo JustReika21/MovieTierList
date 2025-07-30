@@ -25,11 +25,22 @@ def item_info(request, username, item_id):
 
 
 def create_item(request):
-    form = ItemForm
     tags = ItemTag.objects.all()
     context = {
-        'form': form,
         'tags': tags,
         'ratings': (i for i in range(1, 11))
     }
     return render(request, 'items/create_item.html', context)
+
+
+def update_item(request, username, item_id):
+    item = get_object_or_404(Item.objects.select_related('user'), id=item_id)
+    tags = ItemTag.objects.all()
+    selected_tag_id = set(item.tags.values_list('id', flat=True))
+    context = {
+        'item': item,
+        'tags': tags,
+        'selected_tag_id': selected_tag_id,
+        'ratings': (i for i in range(1, 11))
+    }
+    return render(request, 'items/update_item.html', context)

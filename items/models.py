@@ -30,7 +30,7 @@ class Item(models.Model):
         upload_to=cover_upload_to_path,
         default='items/default.jpg',
     )
-    tags = models.ManyToManyField(ItemTag, blank=True)
+    tags = models.ManyToManyField(ItemTag, blank=True, related_name='items')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

@@ -12,4 +12,9 @@ urlpatterns = [
         name='collection_info'
     ),
     path('create/', views.create_collection, name='create_collection'),
+    path(
+        '<str:username>/<int:collection_id>/update/',
+        views.update_collection,
+        name='update_collection'
+    ),
 ]

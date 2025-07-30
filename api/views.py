@@ -30,6 +30,23 @@ class ItemDeleteAPIView(APIView):
         )
 
 
+class ItemUpdateAPIView(APIView):
+    permission_classes = (IsOwner,)
+
+    def patch(self, request, item_id):
+        item = get_object_or_404(Item, id=item_id)
+        self.check_object_permissions(request, item)
+        serializer = ItemSerializer(
+            instance=item,
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CollectionCreateAPIView(APIView):
     def post(self, request):
         serializer = CollectionSerializer(
@@ -52,3 +69,21 @@ class CollectionDeleteAPIView(APIView):
         return Response(
             status=status.HTTP_204_NO_CONTENT
         )
+
+
+class CollectionUpdateAPIView(APIView):
+    permission_classes = (IsOwner,)
+
+    def patch(self, request, collection_id):
+        collection = get_object_or_404(Collection, id=collection_id)
+        self.check_object_permissions(request, collection)
+        serializer = CollectionSerializer(
+            instance=collection,
+            data=request.data,
+            context={'request': request},
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

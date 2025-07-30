@@ -33,3 +33,18 @@ def create_collection(request):
         'items': items,
     }
     return render(request, 'item_collections/create_collection.html', context)
+
+
+def update_collection(request, username, collection_id):
+    collection = get_object_or_404(Collection.objects.select_related(
+        'user'
+    ).prefetch_related('items'), id=collection_id)
+    all_items = Item.objects.filter(user=request.user).order_by('-id')
+    selected_items_ids = set(collection.items.values_list('id', flat=True))
+
+    context = {
+        'collection': collection,
+        'all_items': all_items,
+        'selected_items_ids': selected_items_ids,
+    }
+    return render(request, 'item_collections/update_collection.html', context)

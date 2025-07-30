@@ -11,6 +11,11 @@ urlpatterns = [
         name='item_create'
     ),
     path(
+        'v1/items/update/<int:item_id>/',
+        views.ItemUpdateAPIView.as_view(),
+        name='item_update'
+    ),
+    path(
         'v1/items/delete/<int:item_id>/',
         views.ItemDeleteAPIView.as_view(),
         name='item_delete'
@@ -20,6 +25,11 @@ urlpatterns = [
         'v1/collection/create/',
         views.CollectionCreateAPIView.as_view(),
         name='collection_create'
+    ),
+    path(
+        'v1/collection/update/<int:collection_id>/',
+        views.CollectionUpdateAPIView.as_view(),
+        name='collection_update'
     ),
     path(
         'v1/collection/delete/<int:collection_id>/',

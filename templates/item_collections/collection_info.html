@@ -14,7 +14,7 @@
             <button type="submit">Delete</button>
         </form>
     {% endif %}
-    
+    <a href="{% url 'item_collections:update_collection' collection.user.username collection.id %}">Update</a>
 {% for item in collection.items.all %}
 	{{ item.title }}
 {% endfor %}
