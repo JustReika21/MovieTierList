@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
 from accounts.models import Account
@@ -16,7 +17,7 @@ def all_collections(request, username):
     return render(request, 'item_collections/all_collections.html', context)
 
 
-def collection_info(request, username, collection_id):
+def collection_info(request, collection_id):
     collection = get_object_or_404(
         Collection.objects.select_related('user').prefetch_related('items'),
         id=collection_id
@@ -35,10 +36,15 @@ def create_collection(request):
     return render(request, 'item_collections/create_collection.html', context)
 
 
-def update_collection(request, username, collection_id):
-    collection = get_object_or_404(Collection.objects.select_related(
-        'user'
-    ).prefetch_related('items'), id=collection_id)
+def update_collection(request, collection_id):
+    collection = get_object_or_404(
+        Collection.objects.select_related('user').prefetch_related('items'),
+        id=collection_id
+    )
+
+    if collection.user != request.user:
+        raise Http404('Collection does not exist')
+
     all_items = Item.objects.filter(user=request.user).order_by('-id')
     selected_items_ids = set(collection.items.values_list('id', flat=True))
 

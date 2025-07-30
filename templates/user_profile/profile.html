@@ -7,7 +7,7 @@
     <h1>Items</h1>
     <div class="profile-container">
         {% for item in user_items %}
-            <a href="{% url 'items:item_info' username item.id %}" style="text-decoration: none">
+            <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
                 <div class="item-card">
                     <img src="{{ item.cover.url }}" alt="Обложка">
                     <h2>{{ item.title }}</h2>
@@ -30,7 +30,7 @@
     <h1>Collections</h1>
     <div class="profile-container">
         {% for collection in user_collections %}
-            <a href="{% url 'item_collections:collection_info' username collection.id %}" style="text-decoration: none">
+            <a href="{% url 'item_collections:collection_info' collection.id %}" style="text-decoration: none">
                 <div class="item-card">
                     <img src="{{ collection.cover.url }}" alt="Обложка">
                     <h2>{{ collection.title }}</h2>
