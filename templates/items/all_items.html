@@ -1,3 +1,9 @@
-{% for item in items %}
-    {{ item.title }}
-{% endfor %}
+{% extends 'base.html' %}
+{% block content %}
+    {% for item in items %}
+        {{ item.title }}
+    {% endfor %}
+    {% if paginator.num_pages > 1 %}
+        {% include 'includes/paginator.html' %}
+    {% endif %}
+{% endblock %}

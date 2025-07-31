@@ -1,23 +1,33 @@
-from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
-from items.forms import ItemForm
-from items.models import ItemTag, Item
-from accounts.models import Account
+
+from items.services import (
+    get_user_items,
+    get_user_id,
+    get_item_tags,
+    get_item_details,
+    get_selected_tags_ids,
+)
 
 
 def all_items(request, username):
-    user_id = Account.objects.filter(
-        username=username
-    ).values_list('id', flat=True).first()
-    items = Item.objects.prefetch_related('tags').filter(user=user_id)
+    user_id = get_user_id(username)
+    items = get_user_items(user_id)
+
+    paginator = Paginator(items, 10)
+    page = request.GET.get('page', 1)
+    items_on_page = paginator.page(page)
+
     context = {
-        'items': items,
+        'items': items_on_page,
+        'paginator': paginator,
     }
     return render(request, 'items/all_items.html', context)
 
 
 def item_info(request, item_id):
-    item = get_object_or_404(Item.objects.select_related('user'), id=item_id)
+    item = get_item_details(item_id)
     context = {
         'item': item,
     }
@@ -25,7 +35,7 @@ def item_info(request, item_id):
 
 
 def create_item(request):
-    tags = ItemTag.objects.all()
+    tags = get_item_tags()
     context = {
         'tags': tags,
         'ratings': (i for i in range(1, 11))
@@ -34,9 +44,9 @@ def create_item(request):
 
 
 def update_item(request, item_id):
-    item = get_object_or_404(Item.objects.select_related('user'), id=item_id)
-    tags = ItemTag.objects.all()
-    selected_tag_id = set(item.tags.values_list('id', flat=True))
+    item = get_item_details(item_id)
+    tags = get_item_tags()
+    selected_tag_id = get_selected_tags_ids(item)
     context = {
         'item': item,
         'tags': tags,

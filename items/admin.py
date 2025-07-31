@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from items.forms import ItemForm
 from items.models import Item, ItemTag
 
 
@@ -11,6 +10,5 @@ class ItemTagAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    form = ItemForm
     list_display = ('id', 'title', 'cover')
     list_display_links = ('id', 'title', 'cover')
