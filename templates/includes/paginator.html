@@ -1,13 +1,15 @@
+{% load static %}
+<link href="{% static 'css/includes/paginator.css' %}" rel="stylesheet">
 <div class="pagination">
-    {% if items.has_previous %}
+    {% if page_obj.has_previous %}
         <a href="?page=1">&laquo; First</a>
-        <a href="?page={{ items.previous_page_number }}">Previous</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
     {% endif %}
 
-    Page {{ items.number }} of {{ paginator.num_pages }}
+    <span>Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
 
-    {% if items.has_next %}
-        <a href="?page={{ items.next_page_number }}">Next</a>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
         <a href="?page={{ paginator.num_pages }}">Last &raquo;</a>
     {% endif %}
 </div>

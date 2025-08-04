@@ -1,21 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    {{ item.title }}
-    {{ item.description }}
-    {{ item.user }}
-    {% if item.user == request.user %}
-        <form
+<link href="{% static 'css/items/item_info.css' %}" rel="stylesheet">
+
+<div class="item-info-container">
+    <div class="item-info-cover-wrapper">
+        <img src="{{ item.cover.url }}" alt="Cover Image" class="item-info-cover">
+
+        <div class="item-info-tags">
+            {% for tag in item.tags.all %}
+                <span class="tag">{{ tag }}</span>
+            {% empty %}
+                <span class="tag no-tags">No tags</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="item-info-content">
+        <div class="item-info-title">{{ item.title }}</div>
+        <div class="item-info-rating">Rating: {{ item.rating }}/10</div>
+        <div class="item-info-description">
+            {% if item.description %}
+                {{ item.description }}
+            {% else %}
+                No description
+            {% endif %}
+        </div>
+
+        <div class="item-info-meta">Posted by: {{ item.user }}</div>
+
+        {% if item.user == request.user %}
+        <div class="item-actions">
+            <form
                 id="deleteForm"
                 data-url="{% url 'api:item_delete' item.id %}"
                 data-redirect-url="{% url 'user_profile:user_profile' item.user.username %}"
-        >
-            {% csrf_token %}
-            <button type="submit">Delete</button>
-        </form>
-    {% endif %}
-    <a href="{% url 'items:update_item' item.id %}">Update</a>
+            >
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+            <a href="{% url 'items:update_item' item.id %}">Update</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
 
-    <script src="{% static 'js/items/delete_item.js' %}"></script>
-
+<script src="{% static 'js/items/delete_item.js' %}"></script>
 {% endblock %}

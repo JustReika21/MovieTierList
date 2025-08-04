@@ -1,0 +1,28 @@
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 30px auto;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.pagination a {
+  background-color: #333;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.pagination a:hover {
+  background-color: #555;
+}
+
+.pagination span {
+  padding: 6px 10px;
+  color: #aaa;
+}

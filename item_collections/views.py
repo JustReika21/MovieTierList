@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Count
 
 from accounts.models import Account
 from items.models import Item
@@ -12,7 +13,9 @@ def get_user_id(username):
 
 
 def get_user_collections(user_id):
-    return Collection.objects.filter(user=user_id).order_by('-id')
+    return Collection.objects.filter(
+        user=user_id
+    ).annotate(count_reviews=Count('items')).order_by('-id')
 
 
 def get_collection(collection_id):
@@ -36,10 +39,11 @@ def all_collections(request, username):
 
     paginator = Paginator(collections, 10)
     page = request.GET.get('page', 1)
-    collections_on_page = paginator.page(page)
+    page_obj = paginator.page(page)
 
     context = {
-        'collections': collections_on_page,
+        'page_obj': page_obj,
+        'paginator': paginator,
     }
     return render(request, 'item_collections/all_collections.html', context)
 

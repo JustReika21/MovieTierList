@@ -1,0 +1,145 @@
+.item-info-container {
+  display: flex;
+  gap: 30px;
+  max-width: 75%;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  flex-wrap: wrap;
+}
+
+.item-info-cover-wrapper {
+  flex-shrink: 0;
+  width: 480px;
+  border-radius: 8px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-info-cover {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.item-info-content {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-info-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  margin-bottom: 10px;
+}
+
+.item-info-rating {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffcc00;
+  margin-bottom: 10px;
+}
+
+.item-info-description {
+  font-size: 1rem;
+  color: #ccc;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  margin-bottom: 10px;
+}
+
+.item-info-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 0;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.tag {
+  flex: 1 1 auto;
+  text-align: center;
+  background-color: #2e2e2e;
+  color: #ffcc00;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  min-width: 80px;
+}
+
+.no-tags {
+  background-color: #444;
+  color: #aaa;
+}
+
+.item-info-meta {
+  font-size: 0.95rem;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.item-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.item-actions a,
+.item-actions button {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.item-actions a:hover,
+.item-actions button:hover {
+  background-color: #555;
+}
+
+@media (max-width: 1024px) {
+  .item-info-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .item-info-cover-wrapper {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .item-info-cover {
+    height: 100%;
+  }
+
+  .item-info-content {
+    width: 100%;
+    padding-top: 20px;
+  }
+  .item-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

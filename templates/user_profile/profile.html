@@ -3,46 +3,53 @@
 {% block content %}
     <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
     <title>{{ username }}</title>
-    <h1>Profile: {{ username }}</h1>
-    <h1>Items</h1>
+    <h1 style="text-align: center; padding-top: 10px">Profile: {{ username }}</h1>
+    <h1 style="text-align: center; padding-top: 10px">Reviews</h1>
     <div class="profile-container">
-        {% for item in user_items %}
-            <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
-                <div class="item-card">
-                    <img src="{{ item.cover.url }}" alt="Обложка">
-                    <h2>{{ item.title }}</h2>
-                    <p>{{ item.description }}</p>
-                    <p><strong>Rating:</strong> {{ item.rating }}/10</p>
+        {% if request.user.id == user_id %}
+        <a href="{% url 'items:create_item' %}" style="text-decoration: none">
+            <div class="item-card">
+                <div class="img-container">
+                    <img src="{% static 'img/plus.png' %}" alt="Обложка">
+                </div>
+                <div class="item-content">
+                    <h2>New review</h2>
+                    <p class="description">
+                        Create new review
+                    </p>
                     <div class="item-tags">
-                    {% for tag in item.tags.all %}
-                        {% if forloop.last %}
-                            {{ tag }}
-                        {% else %}
-                            {{ tag }},
-                        {% endif %}
-                    {% endfor %}
+                        New
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endif %}
+            {% include 'includes/items.html' %}
+    </div>
+    <div class="buttons">
+        <a href="{% url 'items:all_items' username %}" class="manage-button">All reviews</a>
+    </div>
+    <h1 style="text-align: center;">Collections</h1>
+
+    <div class="profile-container">
+        {% if request.user.id == user_id %}
+            <a href="{% url 'item_collections:create_collection' %}" style="text-decoration: none">
+                <div class="item-card">
+                    <div class="img-container">
+                        <img src="{% static 'img/plus.png' %}" alt="Обложка">
+                    </div>
+                    <div class="item-content">
+                        <h2>New collection</h2>
+                        <p class="description">
+                            Create new collection
+                        </p>
                     </div>
                 </div>
             </a>
-        {% endfor %}
-        <br>
-    </div>
-    <h1>Collections</h1>
-    <div class="profile-container">
-        {% for collection in user_collections %}
-            <a href="{% url 'item_collections:collection_info' collection.id %}" style="text-decoration: none">
-                <div class="item-card">
-                    <img src="{{ collection.cover.url }}" alt="Обложка">
-                    <h2>{{ collection.title }}</h2>
-                    <p>{{ collection.description }}</p>
-                </div>
-            </a>
-        {% endfor %}
+        {% endif %}
+        {% include 'includes/collections.html' %}
     </div>
     <div class="buttons">
-        <a href="{% url 'items:all_items' username %}" class="manage-button">All items</a>
-        <a href="{% url 'items:create_item' %}" class="manage-button">Create review</a>
         <a href="{% url 'item_collections:all_collections' username %}" class="manage-button">All collections</a>
-        <a href="{% url 'item_collections:create_collection' %}" class="manage-button">Create collection</a>
     </div>
 {% endblock %}

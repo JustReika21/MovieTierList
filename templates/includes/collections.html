@@ -1,0 +1,22 @@
+{% for collection in collections %}
+    <a href="{% url 'item_collections:collection_info' collection.id %}" style="text-decoration: none">
+        <div class="item-card">
+            <div class="img-container">
+                <img src="{{ collection.cover.url }}" alt="Cover">
+            </div>
+            <div class="item-content">
+                <h2>{{ collection.title }}</h2>
+                <p class="description">
+                    {% if collection.description %}
+                        {{ collection.description }}
+                    {% else %}
+                        <span style="color: #666666">No description</span>
+                    {% endif %}
+                </p>
+                <div class="item-tags">
+                    Reviews in collection: {{ collection.count_reviews }}
+                </div>
+            </div>
+        </div>
+    </a>
+{% endfor %}

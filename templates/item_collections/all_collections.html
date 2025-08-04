@@ -1,3 +1,33 @@
-{% for collection in collections %}
-	{{ collection.title }}
-{% endfor %}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
+    <h1>{{  }}</h1>
+    <div class="profile-container">
+        {% for collection in page_obj %}
+            <a href="{% url 'item_collections:collection_info' collection.id %}" style="text-decoration: none">
+                <div class="item-card">
+                    <div class="img-container">
+                        <img src="{{ collection.cover.url }}" alt="Cover">
+                    </div>
+                    <div class="item-content">
+                        <h2>{{ collection.title }}</h2>
+                        <p class="description">
+                            {% if collection.description %}
+                                {{ collection.description }}
+                            {% else %}
+                                <span style="color: #666666">No description</span>
+                            {% endif %}
+                        </p>
+                        <div class="item-tags">
+                            Reviews in collection: {{ collection.count_reviews }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    {% if paginator.num_pages > 1 %}
+        {% include 'includes/paginator.html' %}
+    {% endif %}
+{% endblock %}

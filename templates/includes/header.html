@@ -5,6 +5,12 @@
         <a href="{% url 'core:home' %}" class="navbar-logo">
             <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo-img">
         </a>
+        <input type="checkbox" id="burger-toggle" class="burger-toggle" />
+        <label for="burger-toggle" class="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
         <ul class="navbar-menu">
             {% if request.user.is_authenticated %}
                 <li><a href="{% url 'items:create_item' %}">Create review</a></li>

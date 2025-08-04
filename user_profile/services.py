@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from accounts.models import Account
 from item_collections.models import Collection
 from items.models import Item
@@ -16,4 +18,4 @@ def get_user_items(user_id, limit=5):
 def get_user_collections(user_id, limit=5):
     return Collection.objects.filter(
         user=user_id
-    ).order_by('-id')[:limit]
+    ).annotate(count_reviews=Count('items')).order_by('-id')[:limit]

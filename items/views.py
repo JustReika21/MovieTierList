@@ -17,10 +17,10 @@ def all_items(request, username):
 
     paginator = Paginator(items, 10)
     page = request.GET.get('page', 1)
-    items_on_page = paginator.page(page)
+    page_obj = paginator.page(page)
 
     context = {
-        'items': items_on_page,
+        'page_obj': page_obj,
         'paginator': paginator,
     }
     return render(request, 'items/all_items.html', context)
