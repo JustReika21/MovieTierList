@@ -3,9 +3,10 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from api.serializers import ItemSerializer, CollectionSerializer
+from api.serializers import ItemSerializer, CollectionSerializer, \
+    ItemTagSerializer
 from item_collections.models import Collection
-from items.models import Item
+from items.models import Item, ItemTag
 from api.permissions import IsOwner
 
 
@@ -87,3 +88,10 @@ class CollectionUpdateAPIView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ItemTagGetAPIView(APIView):
+    def get(self, request, query):
+        tags = ItemTag.objects.filter(name__icontains=query)[:5]
+        serializer = ItemTagSerializer(tags, many=True)
+        return Response(serializer.data)

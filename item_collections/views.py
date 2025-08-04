@@ -35,13 +35,14 @@ def get_selected_items_ids(collection):
 
 def all_collections(request, username):
     user_id = get_user_id(username)
-    collections = get_user_collections(user_id)
+    collections = get_user_collections(user_id).order_by('-id')
 
     paginator = Paginator(collections, 10)
     page = request.GET.get('page', 1)
     page_obj = paginator.page(page)
 
     context = {
+        'username': username,
         'page_obj': page_obj,
         'paginator': paginator,
     }

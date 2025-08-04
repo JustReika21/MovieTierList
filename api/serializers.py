@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from item_collections.models import Collection
-from items.models import Item
+from items.models import Item, ItemTag
 
 IMG_FORMATS = ('jpg', 'jpeg', 'png')
 
@@ -72,3 +72,9 @@ class CollectionSerializer(serializers.ModelSerializer):
         if not items:
             raise ValidationError('You must choose at least one item')
         return items
+
+
+class ItemTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemTag
+        fields = '__all__'

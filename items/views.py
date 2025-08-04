@@ -13,15 +13,18 @@ from items.services import (
 
 def all_items(request, username):
     user_id = get_user_id(username)
-    items = get_user_items(user_id)
+    tag_filter = request.GET.get('tag_filter', None)
+    items = get_user_items(user_id, tag_filter).order_by('-id')
 
     paginator = Paginator(items, 10)
     page = request.GET.get('page', 1)
     page_obj = paginator.page(page)
 
     context = {
+        'username': username,
         'page_obj': page_obj,
         'paginator': paginator,
+        'tag_filter': tag_filter,
     }
     return render(request, 'items/all_items.html', context)
 

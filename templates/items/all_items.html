@@ -2,6 +2,20 @@
 {% load static %}
 {% block content %}
     <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
+    <link href="{% static 'css/items/items_all.css' %}" rel="stylesheet">
+    <h1 style="text-align: center">{{ username }}'s reviews</h1>
+    <h1>{{ item_filter }}</h1>
+    <div class="autocomplete-wrapper">
+      <div style="display: flex; gap: 8px;">
+        <input
+                type="text" id="tag-input" placeholder="Type tag..."
+                autocomplete="off" {% if tag_filter %} value=" {{ tag_filter }} "{% endif %}
+        >
+        <button id="tag-search-btn">Search</button>
+        <button id="tag-reset-btn">Reset</button>
+      </div>
+      <ul id="suggestions"></ul>
+    </div>
     <div class="profile-container">
         {% for item in page_obj %}
             <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
@@ -31,4 +45,5 @@
     {% if paginator.num_pages > 1 %}
         {% include 'includes/paginator.html' %}
     {% endif %}
+    <script src="{% static 'js/items/tag_autocomplete.js' %}"></script>
 {% endblock %}

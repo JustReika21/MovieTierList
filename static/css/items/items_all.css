@@ -1,0 +1,53 @@
+.autocomplete-wrapper {
+  position: relative;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+#tag-input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 6px;
+}
+
+#suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  background-color: #2e2e2e;
+  border-top: none;
+  max-height: 160px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.tag-suggestion {
+  padding: 8px 10px;
+  cursor: pointer;
+  color: #ff9900;
+}
+
+.tag-suggestion:hover {
+  background-color: #444;
+}
+
+#tag-search-btn,
+#tag-reset-btn {
+  padding: 8px 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#tag-search-btn:hover,
+#tag-reset-btn:hover {
+  background-color: #555;
+}

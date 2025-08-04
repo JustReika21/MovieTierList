@@ -36,4 +36,10 @@ urlpatterns = [
         views.CollectionDeleteAPIView.as_view(),
         name='collection_delete'
     ),
+
+    path(
+        'v1/tags/get/<str:query>/',
+        views.ItemTagGetAPIView.as_view(),
+        name='tag_get'
+    ),
 ]
