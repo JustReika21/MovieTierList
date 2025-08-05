@@ -44,6 +44,12 @@ class ItemSerializer(serializers.ModelSerializer):
         return tags
 
 
+class ItemSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['id', 'title', 'rating', 'cover']
+
+
 class UserOwnedItemPKField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         user = self.context['request'].user

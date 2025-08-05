@@ -3,8 +3,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from api.serializers import ItemSerializer, CollectionSerializer, \
-    ItemTagSerializer
+from api.serializers import (
+    ItemSerializer,
+    CollectionSerializer,
+    ItemTagSerializer,
+    ItemSearchSerializer
+)
 from item_collections.models import Collection
 from items.models import Item, ItemTag
 from api.permissions import IsOwner
@@ -46,6 +50,21 @@ class ItemUpdateAPIView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ItemSearchAPIView(APIView):
+    def get(self, request):
+        user_id = request.query_params.get('user_id', None)
+        query = request.query_params.get('query', 'a')
+
+        if user_id:
+            item = Item.objects.filter(
+                user=user_id,
+                title__icontains=query
+            )[:5]
+            serializer = ItemSearchSerializer(item, many=True)
+            return Response(serializer.data)
+        return Item.objects.none()
 
 
 class CollectionCreateAPIView(APIView):
@@ -91,7 +110,9 @@ class CollectionUpdateAPIView(APIView):
 
 
 class ItemTagGetAPIView(APIView):
-    def get(self, request, query):
+    def get(self, request):
+        query = request.query_params.get('query', 'a')
+
         tags = ItemTag.objects.filter(name__icontains=query)[:5]
         serializer = ItemTagSerializer(tags, many=True)
         return Response(serializer.data)

@@ -3,57 +3,80 @@
 {% block content %}
     <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
     <link href="{% static 'css/items/items_all.css' %}" rel="stylesheet">
-    <h1 style="text-align: center">{{ username }}'s reviews</h1>
-    <div class="filters-wrapper">
-        <div class="filter-group">
-            <label for="tag-input">Tag:</label>
-            <input 
-                    type="text" id="tag-input" placeholder="Type tag..." 
-                    autocomplete="off" {% if tag_filter %} value="{{ tag_filter }}" {% endif %}>
-            <ul id="suggestions"></ul>
-        </div>
+    
+    <h1 class="text-center">{{ username }}'s reviews</h1>
+    
+    <div class="page-layout">
+        <aside class="filters-panel">
+            <div class="item-search-wrapper">
+                <label for="item-search-input">Search {{ username }}'s review:</label>
+                <input
+                    type="text"
+                    id="item-search-input"
+                    placeholder="Enter title..."
+                    autocomplete="off"
+                    data-user-id="{{ user_id }}"
+                >
+                <ul id="item-search-results"></ul>
+            </div>
         
-        <div class="filter-group">
-            <label for="rating-input">Rating:</label>
-            <input 
-                    type="number" id="rating-input" placeholder="Enter rating (1-10)"
-                    {% if rating_filter %} value="{{ rating_filter }}" {% endif %}
-            >
-        </div>
-        
-        <div class="filter-buttons">
-            <button id="search-btn">Search</button>
-            <button id="reset-btn">Reset</button>
-        </div>
-    </div>
-    <div class="profile-container">
-        {% for item in page_obj %}
-            <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
-                <div class="item-card">
-                    <div class="img-container">
-                        <img src="{{ item.cover.url }}" alt="Обложка">
-                    </div>
-                    <div class="item-content">
-                        <h2>{{ item.title }}</h2>
-                        <p class="description">
-                            {% if item.description %}
-                                {{ item.description }}
-                            {% else %}
-                                <span style="color: #666666">No description<span>
-                            {% endif %}
-                        </p>
-                        <div class="item-tags">
-                            {% for tag in item.tags.all %}
-                                {{ tag }}{% if not forloop.last %},{% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+            <div class="filters-wrapper">
+                <div class="filter-group">
+                    <label for="tag-input">Tag:</label>
+                    <input
+                        type="text" id="tag-input" placeholder="Enter tag..."
+                        autocomplete="off" {% if tag_filter %} value="{{ tag_filter }}" {% endif %}>
+                    <ul id="suggestions"></ul>
                 </div>
-            </a>
-        {% endfor %}
+    
+                <div class="filter-group">
+                    <label for="rating-input">Rating:</label>
+                    <input
+                        type="number" id="rating-input" placeholder="Enter rating (1-10)"
+                        {% if rating_filter %} value="{{ rating_filter }}" {% endif %}
+                    >
+                </div>
+    
+                <div class="filter-buttons">
+                    <button id="search-btn">Search</button>
+                    <button id="reset-btn">Reset</button>
+                </div>
+            </div>
+        </aside>
+    
+        <main class="items-panel">
+            <div class="profile-container">
+                {% for item in page_obj %}
+                    <a href="{% url 'items:item_info' item.id %}" class="item-link">
+                        <div class="item-card">
+                            <div class="img-container">
+                                <img src="{{ item.cover.url }}" alt="Обложка">
+                            </div>
+                            <div class="item-content">
+                                <h2>{{ item.title }}</h2>
+                                <p class="description">
+                                    {% if item.description %}
+                                        {{ item.description }}
+                                    {% else %}
+                                        <span class="text-muted">No description</span>
+                                    {% endif %}
+                                </p>
+                                <div class="item-tags">
+                                    {% for tag in item.tags.all %}
+                                        {{ tag }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            {% if paginator.num_pages > 1 %}
+                {% include 'includes/paginator.html' %}
+            {% endif %}
+        </main>
     </div>
-    {% if paginator.num_pages > 1 %}
-        {% include 'includes/paginator.html' %}
-    {% endif %}
+    
     <script src="{% static 'js/items/filters.js' %}"></script>
+    <script src="{% static 'js/items/items_search.js' %}"></script>
 {% endblock %}

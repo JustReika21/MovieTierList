@@ -4,48 +4,51 @@ const suggestions = document.getElementById('suggestions');
 const searchBtn = document.getElementById('search-btn');
 const resetBtn = document.getElementById('reset-btn');
 
-// Autocomplete
+let tagTimeout = null;
+
 tagInput.addEventListener('input', () => {
   const q = tagInput.value.trim();
+  clearTimeout(tagTimeout);
+
   if (!q) {
     suggestions.innerHTML = '';
     return;
   }
 
-  fetch(`/api/v1/tags/get/${q}`)
-    .then(res => res.json())
-    .then(data => {
-      suggestions.innerHTML = '';
+  tagTimeout = setTimeout(() => {
+    fetch(`/api/v1/tags/get/?query=${q}`)
+      .then(res => res.json())
+      .then(data => {
+        suggestions.innerHTML = '';
 
-      if (data.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = 'No results found';
-        li.style.color = '#aaa';
-        suggestions.appendChild(li);
-        return;
-      }
+        if (data.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'No results found';
+          li.style.color = '#aaa';
+          suggestions.appendChild(li);
+          return;
+        }
 
-      data.forEach(tag => {
-        const li = document.createElement('li');
-        li.textContent = tag.name;
-        li.classList.add('tag-suggestion');
-        li.addEventListener('click', () => {
-          tagInput.value = tag.name;
-          suggestions.innerHTML = '';
+        data.forEach(tag => {
+          const li = document.createElement('li');
+          li.textContent = tag.name;
+          li.classList.add('tag-suggestion');
+          li.addEventListener('click', () => {
+            tagInput.value = tag.name;
+            suggestions.innerHTML = '';
+          });
+          suggestions.appendChild(li);
         });
-        suggestions.appendChild(li);
       });
-    });
+  }, 100);
 });
 
-// Hide suggestions on outside click
 document.addEventListener('click', (e) => {
   if (!document.querySelector('.filters-wrapper').contains(e.target)) {
     suggestions.innerHTML = '';
   }
 });
 
-// Search
 searchBtn.addEventListener('click', () => {
   const tagValue = tagInput.value.trim();
   const ratingValue = ratingInput.value.trim();
@@ -68,7 +71,6 @@ searchBtn.addEventListener('click', () => {
   window.location.search = params.toString() ? `?${params.toString()}` : '';
 });
 
-// Reset
 resetBtn.addEventListener('click', () => {
   const params = new URLSearchParams(window.location.search);
   params.delete('tag_filter');

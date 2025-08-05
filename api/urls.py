@@ -20,6 +20,11 @@ urlpatterns = [
         views.ItemDeleteAPIView.as_view(),
         name='item_delete'
     ),
+    path(
+        'v1/items/search/',
+        views.ItemSearchAPIView.as_view(),
+        name='item_search'
+    ),
 
     path(
         'v1/collection/create/',
@@ -38,7 +43,7 @@ urlpatterns = [
     ),
 
     path(
-        'v1/tags/get/<str:query>/',
+        'v1/tags/get/',
         views.ItemTagGetAPIView.as_view(),
         name='tag_get'
     ),

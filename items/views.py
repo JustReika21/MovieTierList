@@ -27,6 +27,7 @@ def all_items(request, username):
 
     context = {
         'username': username,
+        'user_id': user_id,
         'page_obj': page_obj,
         'paginator': paginator,
         'tag_filter': tag_filter,
