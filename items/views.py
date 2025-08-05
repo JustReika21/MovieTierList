@@ -3,8 +3,9 @@ from django.shortcuts import render
 
 
 from items.services import (
-    get_user_items,
     get_user_id,
+    get_user_items,
+    get_filters,
     get_item_tags,
     get_item_details,
     get_selected_tags_ids,
@@ -14,7 +15,11 @@ from items.services import (
 def all_items(request, username):
     user_id = get_user_id(username)
     tag_filter = request.GET.get('tag_filter', None)
-    items = get_user_items(user_id, tag_filter).order_by('-id')
+    rating_filter = request.GET.get('rating_filter', None)
+
+    filters = get_filters(tag_filter, rating_filter)
+
+    items = get_user_items(user_id, filters)
 
     paginator = Paginator(items, 10)
     page = request.GET.get('page', 1)
@@ -25,6 +30,7 @@ def all_items(request, username):
         'page_obj': page_obj,
         'paginator': paginator,
         'tag_filter': tag_filter,
+        'rating_filter': rating_filter,
     }
     return render(request, 'items/all_items.html', context)
 

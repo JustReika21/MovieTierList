@@ -8,15 +8,21 @@ def get_user_id(username):
     return Account.objects.get(username=username).id
 
 
-def get_user_items(user_id, tag_filter=None):
-    if tag_filter:
-        items = Item.objects.prefetch_related(
-            'tags'
-        ).filter(user=user_id, tags__name=tag_filter)
-    else:
-        items = Item.objects.prefetch_related('tags').filter(user=user_id)
+def get_filters(tag_filter, rating_filter):
+    filters = {}
 
-    return items
+    if tag_filter:
+        filters['tags__name'] = tag_filter
+    if rating_filter:
+        filters['rating'] = rating_filter
+
+    return filters
+
+
+def get_user_items(user_id, filters):
+    return Item.objects.prefetch_related(
+        'tags'
+    ).filter(user=user_id, **filters).order_by('-id')
 
 
 def get_item_details(item_id):

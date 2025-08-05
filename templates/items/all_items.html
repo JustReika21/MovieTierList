@@ -4,17 +4,27 @@
     <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
     <link href="{% static 'css/items/items_all.css' %}" rel="stylesheet">
     <h1 style="text-align: center">{{ username }}'s reviews</h1>
-    <h1>{{ item_filter }}</h1>
-    <div class="autocomplete-wrapper">
-      <div style="display: flex; gap: 8px;">
-        <input
-                type="text" id="tag-input" placeholder="Type tag..."
-                autocomplete="off" {% if tag_filter %} value=" {{ tag_filter }} "{% endif %}
-        >
-        <button id="tag-search-btn">Search</button>
-        <button id="tag-reset-btn">Reset</button>
-      </div>
-      <ul id="suggestions"></ul>
+    <div class="filters-wrapper">
+        <div class="filter-group">
+            <label for="tag-input">Tag:</label>
+            <input 
+                    type="text" id="tag-input" placeholder="Type tag..." 
+                    autocomplete="off" {% if tag_filter %} value="{{ tag_filter }}" {% endif %}>
+            <ul id="suggestions"></ul>
+        </div>
+        
+        <div class="filter-group">
+            <label for="rating-input">Rating:</label>
+            <input 
+                    type="number" id="rating-input" placeholder="Enter rating (1-10)"
+                    {% if rating_filter %} value="{{ rating_filter }}" {% endif %}
+            >
+        </div>
+        
+        <div class="filter-buttons">
+            <button id="search-btn">Search</button>
+            <button id="reset-btn">Reset</button>
+        </div>
     </div>
     <div class="profile-container">
         {% for item in page_obj %}
@@ -45,5 +55,5 @@
     {% if paginator.num_pages > 1 %}
         {% include 'includes/paginator.html' %}
     {% endif %}
-    <script src="{% static 'js/items/tag_autocomplete.js' %}"></script>
+    <script src="{% static 'js/items/filters.js' %}"></script>
 {% endblock %}

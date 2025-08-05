@@ -1,10 +1,19 @@
-.autocomplete-wrapper {
-  position: relative;
-  max-width: 300px;
+.filters-wrapper {
+  max-width: 320px;
   margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  color: #fff;
 }
 
-#tag-input {
+.filter-group {
+  position: relative;
+}
+
+input[type="text"],
+input[type="number"] {
   width: 100%;
   padding: 8px 10px;
   font-size: 0.95rem;
@@ -37,8 +46,14 @@
   background-color: #444;
 }
 
-#tag-search-btn,
-#tag-reset-btn {
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+#search-btn,
+#reset-btn {
+  flex: 1;
   padding: 8px 16px;
   background-color: #333;
   color: #fff;
@@ -47,7 +62,7 @@
   cursor: pointer;
 }
 
-#tag-search-btn:hover,
-#tag-reset-btn:hover {
+#search-btn:hover,
+#reset-btn:hover {
   background-color: #555;
 }
