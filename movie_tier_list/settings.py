@@ -131,3 +131,5 @@ AUTH_USER_MODEL = 'accounts.Account'
 LOGIN_URL = 'accounts:login'
 
 LOGIN_REDIRECT_URL = 'core:home'
+
+LOGOUT_REDIRECT_URL = 'core:home'

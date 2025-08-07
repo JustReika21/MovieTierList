@@ -13,7 +13,7 @@ urlpatterns = [
     ),
     path('create/', views.create_collection, name='create_collection'),
     path(
-        '<int:collection_id>/update/',
+        'update/<int:collection_id>/',
         views.update_collection,
         name='update_collection'
     ),

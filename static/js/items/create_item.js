@@ -15,18 +15,21 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response =>{
+        .then(response => {
             if (response.status === 201) {
                 window.location.href = redirectUrl;
             } else {
                 return response.json().then(data => {
-                    throw new Error(data?.message || "Create Failed");
+                    const errors = Object.entries(data)
+                        .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+                        .join("\n");
+                    throw new Error(errors || "Create Failed");
                 });
             }
         })
         .catch(error => {
-            console.error('Network error:', error);
-            alert('Request failed.');
-        })
+            console.error('Network error:', error.message);
+            alert('Request failed:\n' + error.message);
+        });
     });
 });

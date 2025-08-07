@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById("createForm");
 
-    form.addEventListener('submit', async function (e) {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const formData = new FormData(form);
@@ -15,18 +15,21 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response =>{
+        .then(response => {
             if (response.status === 200) {
                 window.location.href = redirectUrl;
             } else {
                 return response.json().then(data => {
-                    throw new Error(data?.message || "Create Failed");
+                    const errorText = Object.entries(data)
+                        .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+                        .join("\n");
+                    throw new Error(errorText || "Update failed");
                 });
             }
         })
         .catch(error => {
-            console.error('Network error:', error);
-            alert('Request failed.');
-        })
+            console.error("Network error:", error);
+            alert("Update failed:\n" + error.message);
+        });
     });
 });

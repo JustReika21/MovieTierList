@@ -9,6 +9,20 @@ IMG_FORMATS = ('jpg', 'jpeg', 'png')
 
 
 def cover_validator(cover):
+    """
+    Validate an uploaded image file.
+
+    Checks:
+        - File must not exceed 4MB.
+        - Must be a valid image (jpg, jpeg, png).
+        - File must be an actual image file.
+
+    Raises:
+        ValidationError: If any condition fails.
+
+    Returns:
+        File: The validated image file.
+    """
     if not cover:
         return
 

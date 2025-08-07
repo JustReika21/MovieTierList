@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("deleteForm");
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", (event) => {
         event.preventDefault();
 
         const url = form.getAttribute("data-url");
@@ -12,22 +12,26 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(url, {
             method: 'DELETE',
             headers: {
-                "X-CSRFToken": csrfToken,
+                'X-CSRFToken': csrfToken,
                 'Accept': 'application/json'
             },
-            credentials: "same-origin"
+            credentials: 'same-origin'
         })
         .then(response => {
             if (response.status === 204) {
                 window.location.href = redirectUrl;
             } else {
                 return response.json().then(data => {
-                    throw new Error(data?.message || "Delete failed");
+                    const errorText = Object.entries(data)
+                        .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+                        .join("\n");
+                    throw new Error(errorText || "Delete failed");
                 });
             }
         })
         .catch(error => {
             console.error("Error:", error);
+            alert("Delete failed:\n" + error.message);
         });
     });
 });

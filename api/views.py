@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -15,6 +16,8 @@ from api.permissions import IsOwner
 
 
 class ItemCreateAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
@@ -24,7 +27,7 @@ class ItemCreateAPIView(APIView):
 
 
 class ItemDeleteAPIView(APIView):
-    permission_classes = (IsOwner,)
+    permission_classes = (IsAuthenticated, IsOwner,)
 
     def delete(self, request, item_id):
         item = get_object_or_404(Item, id=item_id)
@@ -36,7 +39,7 @@ class ItemDeleteAPIView(APIView):
 
 
 class ItemUpdateAPIView(APIView):
-    permission_classes = (IsOwner,)
+    permission_classes = (IsAuthenticated, IsOwner,)
 
     def patch(self, request, item_id):
         item = get_object_or_404(Item, id=item_id)
@@ -68,11 +71,14 @@ class ItemSearchAPIView(APIView):
 
 
 class CollectionCreateAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         serializer = CollectionSerializer(
             data=request.data,
             context={'request': request}
         )
+        self.check_object_permissions(request, request.user)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -80,7 +86,7 @@ class CollectionCreateAPIView(APIView):
 
 
 class CollectionDeleteAPIView(APIView):
-    permission_classes = (IsOwner,)
+    permission_classes = (IsAuthenticated, IsOwner,)
 
     def delete(self, request, collection_id):
         collection = get_object_or_404(Collection, id=collection_id)
@@ -92,7 +98,7 @@ class CollectionDeleteAPIView(APIView):
 
 
 class CollectionUpdateAPIView(APIView):
-    permission_classes = (IsOwner,)
+    permission_classes = (IsAuthenticated, IsOwner,)
 
     def patch(self, request, collection_id):
         collection = get_object_or_404(Collection, id=collection_id)

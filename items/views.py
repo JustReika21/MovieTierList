@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 
 
@@ -6,7 +8,7 @@ from items.services import (
     get_user_id,
     get_user_items,
     get_filters,
-    get_item_tags,
+    get_tags,
     get_item_details,
     get_selected_tags_ids,
 )
@@ -44,8 +46,9 @@ def item_info(request, item_id):
     return render(request, 'items/item_info.html', context)
 
 
+@login_required
 def create_item(request):
-    tags = get_item_tags()
+    tags = get_tags()
     context = {
         'tags': tags,
         'ratings': (i for i in range(1, 11))
@@ -53,9 +56,16 @@ def create_item(request):
     return render(request, 'items/create_item.html', context)
 
 
+@login_required
 def update_item(request, item_id):
     item = get_item_details(item_id)
-    tags = get_item_tags()
+
+    if item.user_id != request.user.id:
+        return HttpResponseForbidden(
+            'You don\'t have permission to edit this review.'
+        )
+
+    tags = get_tags()
     selected_tag_id = get_selected_tags_ids(item)
     context = {
         'item': item,

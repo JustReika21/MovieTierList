@@ -14,8 +14,12 @@ def user_profile(request, username):
     if not user_id:
         raise Http404('User not found')
 
-    items = get_user_items(user_id, 4)
-    collections = get_user_collections(user_id, 4)
+    limit = 5
+    if request.user.id == user_id:
+        limit = 4
+
+    items = get_user_items(user_id, limit)
+    collections = get_user_collections(user_id, limit)
 
     context = {
         'user_id': user_id,
