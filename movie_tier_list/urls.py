@@ -6,6 +6,12 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 from movie_tier_list import settings
 
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),
@@ -14,6 +20,10 @@ urlpatterns = [
     path('collections/', include('item_collections.urls')),
     path('items/', include('items.urls')),
     path('profile/', include('user_profile.urls')),
+
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
 if settings.DEBUG:

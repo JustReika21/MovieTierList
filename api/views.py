@@ -1,8 +1,15 @@
 from django.shortcuts import get_object_or_404
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiResponse
+)
 
 from api.serializers import (
     ItemSerializer,
@@ -18,6 +25,13 @@ from api.permissions import IsOwner
 class ItemCreateAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(
+        request=ItemSerializer,
+        responses={
+            201: ItemSerializer,
+            400: OpenApiResponse(description='Validation Error')
+        },
+    )
     def post(self, request):
         serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
@@ -29,6 +43,14 @@ class ItemCreateAPIView(APIView):
 class ItemDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
+    @extend_schema(
+        request=ItemSerializer,
+        responses={
+            204: None,
+            403: OpenApiResponse(description='Forbidden'),
+            404: OpenApiResponse(description='Item not found')
+        },
+    )
     def delete(self, request, item_id):
         item = get_object_or_404(Item, id=item_id)
         self.check_object_permissions(request, item)
@@ -41,6 +63,15 @@ class ItemDeleteAPIView(APIView):
 class ItemUpdateAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
+    @extend_schema(
+        request=ItemSerializer,
+        responses={
+            200: None,
+            400: OpenApiResponse(description='Validation Error'),
+            403: OpenApiResponse(description='Forbidden'),
+            404: OpenApiResponse(description='Item not found')
+        },
+    )
     def patch(self, request, item_id):
         item = get_object_or_404(Item, id=item_id)
         self.check_object_permissions(request, item)
@@ -51,11 +82,18 @@ class ItemUpdateAPIView(APIView):
         )
         if serializer.is_valid():
             serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ItemSearchAPIView(APIView):
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='user_id', required=True, type=int),
+            OpenApiParameter(name='query', required=True, type=str),
+        ],
+        responses={200: ItemSearchSerializer(many=True)}
+    )
     def get(self, request):
         user_id = request.query_params.get('user_id', None)
         query = request.query_params.get('query', 'a')
@@ -66,13 +104,20 @@ class ItemSearchAPIView(APIView):
                 title__icontains=query
             )[:5]
             serializer = ItemSearchSerializer(item, many=True)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Item.objects.none()
 
 
 class CollectionCreateAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(
+        request=CollectionSerializer,
+        responses={
+            201: CollectionSerializer,
+            400: OpenApiResponse(description='Validation Error'),
+        }
+    )
     def post(self, request):
         serializer = CollectionSerializer(
             data=request.data,
@@ -88,6 +133,14 @@ class CollectionCreateAPIView(APIView):
 class CollectionDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
+    @extend_schema(
+        request=CollectionSerializer,
+        responses={
+            204: None,
+            403: OpenApiResponse(description='Forbidden'),
+            404: OpenApiResponse(description='Collection not found')
+        },
+    )
     def delete(self, request, collection_id):
         collection = get_object_or_404(Collection, id=collection_id)
         self.check_object_permissions(request, collection)
@@ -100,6 +153,15 @@ class CollectionDeleteAPIView(APIView):
 class CollectionUpdateAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
+    @extend_schema(
+        request=CollectionSerializer,
+        responses={
+            204: None,
+            400: OpenApiResponse(description='Validation Error'),
+            403: OpenApiResponse(description='Forbidden'),
+            404: OpenApiResponse(description='Collection not found')
+        },
+    )
     def patch(self, request, collection_id):
         collection = get_object_or_404(Collection, id=collection_id)
         self.check_object_permissions(request, collection)
@@ -111,11 +173,17 @@ class CollectionUpdateAPIView(APIView):
         )
         if serializer.is_valid():
             serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ItemTagGetAPIView(APIView):
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='query', required=True, type=str),
+        ],
+        responses={200: ItemTagSerializer(many=True)}
+    )
     def get(self, request):
         query = request.query_params.get('query', 'a')
 

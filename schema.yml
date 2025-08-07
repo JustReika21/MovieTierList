@@ -1,0 +1,395 @@
+openapi: 3.0.3
+info:
+  title: Your Project API
+  version: 1.0.0
+  description: Your project description
+paths:
+  /api/v1/collection/create/:
+    post:
+      operationId: v1_collection_create_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collection'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Collection'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Collection'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+          description: ''
+        '400':
+          description: Validation Error
+  /api/v1/collection/delete/{collection_id}/:
+    delete:
+      operationId: v1_collection_delete_destroy
+      parameters:
+      - in: path
+        name: collection_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+        '403':
+          description: Forbidden
+        '404':
+          description: Collection not found
+  /api/v1/collection/update/{collection_id}/:
+    patch:
+      operationId: v1_collection_update_partial_update
+      parameters:
+      - in: path
+        name: collection_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCollection'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCollection'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCollection'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          description: No response body
+        '400':
+          description: Validation Error
+        '403':
+          description: Forbidden
+        '404':
+          description: Collection not found
+  /api/v1/items/create/:
+    post:
+      operationId: v1_items_create_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Item'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: ''
+        '400':
+          description: Validation Error
+  /api/v1/items/delete/{item_id}/:
+    delete:
+      operationId: v1_items_delete_destroy
+      parameters:
+      - in: path
+        name: item_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+        '403':
+          description: Forbidden
+        '404':
+          description: Item not found
+  /api/v1/items/search/:
+    get:
+      operationId: v1_items_search_list
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemSearch'
+          description: ''
+  /api/v1/items/update/{item_id}/:
+    patch:
+      operationId: v1_items_update_partial_update
+      parameters:
+      - in: path
+        name: item_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          description: No response body
+        '400':
+          description: Validation Error
+        '403':
+          description: Forbidden
+        '404':
+          description: Item not found
+  /api/v1/tags/get/:
+    get:
+      operationId: v1_tags_get_list
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemTag'
+          description: ''
+components:
+  schemas:
+    Collection:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 127
+        description:
+          type: string
+        cover:
+          type: string
+          format: uri
+        items:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        items_details:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        user:
+          type: integer
+      required:
+      - items
+      - items_details
+      - title
+      - user
+    Item:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 127
+        description:
+          type: string
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -32768
+          maximum: 32767
+        cover:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: integer
+        user:
+          type: integer
+      required:
+      - rating
+      - title
+      - user
+    ItemSearch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 127
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -32768
+          maximum: 32767
+        cover:
+          type: string
+          format: uri
+      required:
+      - id
+      - rating
+      - title
+    ItemTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 127
+      required:
+      - id
+      - name
+    PatchedCollection:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 127
+        description:
+          type: string
+        cover:
+          type: string
+          format: uri
+        items:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        items_details:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        user:
+          type: integer
+    PatchedItem:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 127
+        description:
+          type: string
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -32768
+          maximum: 32767
+        cover:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: integer
+        user:
+          type: integer
+    RatingEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      type: integer
+      description: |-
+        * `1` - 1
+        * `2` - 2
+        * `3` - 3
+        * `4` - 4
+        * `5` - 5
+        * `6` - 6
+        * `7` - 7
+        * `8` - 8
+        * `9` - 9
+        * `10` - 10
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
