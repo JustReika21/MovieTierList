@@ -5,7 +5,7 @@
     <h1 style="text-align: center">{{ username }}'s collections</h1>
     <div class="profile-container">
         {% for collection in page_obj %}
-            <a href="{% url 'item_collections:collection_info' collection.id %}" style="text-decoration: none">
+            <a href="{% url 'item_collections:collection-info' collection.id %}" style="text-decoration: none">
                 <div class="item-card">
                     <div class="img-container">
                         <img src="{{ collection.cover.url }}" alt="Cover">

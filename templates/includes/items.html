@@ -1,5 +1,5 @@
 {% for item in items %}
-    <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
+    <a href="{% url 'items:item-info' item.id %}" style="text-decoration: none">
         <div class="item-card">
             <div class="img-container">
                 <img src="{{ item.cover.url }}" alt="Обложка">

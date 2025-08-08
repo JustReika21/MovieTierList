@@ -3,8 +3,8 @@
 {% block content %}
     <form 
             id="createForm"
-            action="{% url 'api:item_create' %}"
-            data-redirect-url="{% url 'user_profile:user_profile' request.user.username %}"
+            action="{% url 'api:item-list' %}"
+            data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
     >
         {% csrf_token %}
     

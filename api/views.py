@@ -22,6 +22,7 @@ from items.models import Item, ItemTag
 from api.permissions import IsOwner
 
 
+@extend_schema(tags=['Items'])
 class ItemCreateAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -41,7 +42,8 @@ class ItemCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ItemDeleteAPIView(APIView):
+@extend_schema(tags=['Items'])
+class ItemUpdateDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @extend_schema(
@@ -61,12 +63,7 @@ class ItemDeleteAPIView(APIView):
             status=status.HTTP_204_NO_CONTENT
         )
 
-
-class ItemUpdateAPIView(APIView):
-    permission_classes = (IsAuthenticated, IsOwner,)
-
     @extend_schema(
-        tags=['Items'],
         request=ItemSerializer,
         responses={
             200: None,

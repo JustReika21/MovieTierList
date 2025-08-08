@@ -10,7 +10,7 @@
             <div class="item-info-tags">
                 {% for tag in item.tags.all %}
                     <a 
-                            href="{% url 'items:all_items' item.user.username %}?tag_filter={{ tag }}"
+                            href="{% url 'items:all-items' item.user.username %}?tag_filter={{ tag }}"
                             style="text-decoration: none"
                             class="tag"
                     >{{ tag }}
@@ -38,13 +38,13 @@
             <div class="item-actions">
                 <form
                     id="deleteForm"
-                    data-url="{% url 'api:item_delete' item.id %}"
-                    data-redirect-url="{% url 'user_profile:user_profile' item.user.username %}"
+                    data-url="{% url 'api:item-detail' item.id %}"
+                    data-redirect-url="{% url 'user_profile:user-profile' item.user.username %}"
                 >
                     {% csrf_token %}
                     <button type="submit">Delete</button>
                 </form>
-                <a href="{% url 'items:update_item' item.id %}">Update</a>
+                <a href="{% url 'items:update-item' item.id %}">Update</a>
             </div>
             {% endif %}
         </div>

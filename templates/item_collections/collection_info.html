@@ -20,20 +20,20 @@
                     <div class="item-actions">
                         <form
                             id="deleteForm"
-                            data-url="{% url 'api:collection_delete' collection.id %}"
-                            data-redirect-url="{% url 'user_profile:user_profile' collection.user.username %}"
+                            data-url="{% url 'api:collection-delete' collection.id %}"
+                            data-redirect-url="{% url 'user_profile:user-profile' collection.user.username %}"
                         >
                             {% csrf_token %}
                             <button type="submit">Delete</button>
                         </form>
-                        <a href="{% url 'item_collections:update_collection' collection.id %}">Update</a>
+                        <a href="{% url 'item_collections:update-collection' collection.id %}">Update</a>
                     </div>
                 {% endif %}
             </div>
         </div>
         <div class="collection-items">
             {% for item in collection.items.all %}
-                <a href="{% url 'items:item_info' item.id %}" style="text-decoration: none">
+                <a href="{% url 'items:item-info' item.id %}" style="text-decoration: none">
                     <div class="item-card">
                         <div class="img-container">
                             <img src="{{ item.cover.url }}" alt="Обложка">

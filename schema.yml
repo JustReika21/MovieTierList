@@ -8,7 +8,7 @@ paths:
     post:
       operationId: v1_collection_create_create
       tags:
-      - v1
+      - Collections
       requestBody:
         content:
           application/json:
@@ -43,7 +43,7 @@ paths:
           type: integer
         required: true
       tags:
-      - v1
+      - Collections
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -64,7 +64,7 @@ paths:
           type: integer
         required: true
       tags:
-      - v1
+      - Collections
       requestBody:
         content:
           application/json:
@@ -80,7 +80,7 @@ paths:
       - cookieAuth: []
       - basicAuth: []
       responses:
-        '200':
+        '204':
           description: No response body
         '400':
           description: Validation Error
@@ -88,11 +88,11 @@ paths:
           description: Forbidden
         '404':
           description: Collection not found
-  /api/v1/items/create/:
+  /api/v1/items/:
     post:
-      operationId: v1_items_create_create
+      operationId: v1_items_create
       tags:
-      - v1
+      - Items
       requestBody:
         content:
           application/json:
@@ -117,9 +117,9 @@ paths:
           description: ''
         '400':
           description: Validation Error
-  /api/v1/items/delete/{item_id}/:
-    delete:
-      operationId: v1_items_delete_destroy
+  /api/v1/items/{item_id}:
+    patch:
+      operationId: v1_items_partial_update
       parameters:
       - in: path
         name: item_id
@@ -127,7 +127,40 @@ paths:
           type: integer
         required: true
       tags:
-      - v1
+      - Items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          description: No response body
+        '400':
+          description: Validation Error
+        '403':
+          description: Forbidden
+        '404':
+          description: Item not found
+    delete:
+      operationId: v1_items_destroy
+      parameters:
+      - in: path
+        name: item_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Items
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -153,7 +186,7 @@ paths:
           type: integer
         required: true
       tags:
-      - v1
+      - Items
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -167,40 +200,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ItemSearch'
           description: ''
-  /api/v1/items/update/{item_id}/:
-    patch:
-      operationId: v1_items_update_partial_update
-      parameters:
-      - in: path
-        name: item_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedItem'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedItem'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedItem'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      responses:
-        '200':
-          description: No response body
-        '400':
-          description: Validation Error
-        '403':
-          description: Forbidden
-        '404':
-          description: Item not found
   /api/v1/tags/get/:
     get:
       operationId: v1_tags_get_list
@@ -211,7 +210,7 @@ paths:
           type: string
         required: true
       tags:
-      - v1
+      - ItemTags
       security:
       - cookieAuth: []
       - basicAuth: []
