@@ -26,6 +26,7 @@ class ItemCreateAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     @extend_schema(
+        tags=['Items'],
         request=ItemSerializer,
         responses={
             201: ItemSerializer,
@@ -44,6 +45,7 @@ class ItemDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @extend_schema(
+        tags=['Items'],
         request=ItemSerializer,
         responses={
             204: None,
@@ -64,6 +66,7 @@ class ItemUpdateAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @extend_schema(
+        tags=['Items'],
         request=ItemSerializer,
         responses={
             200: None,
@@ -88,6 +91,7 @@ class ItemUpdateAPIView(APIView):
 
 class ItemSearchAPIView(APIView):
     @extend_schema(
+        tags=['Items'],
         parameters=[
             OpenApiParameter(name='user_id', required=True, type=int),
             OpenApiParameter(name='query', required=True, type=str),
@@ -112,6 +116,7 @@ class CollectionCreateAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     @extend_schema(
+        tags=['Collections'],
         request=CollectionSerializer,
         responses={
             201: CollectionSerializer,
@@ -134,6 +139,7 @@ class CollectionDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @extend_schema(
+        tags=['Collections'],
         request=CollectionSerializer,
         responses={
             204: None,
@@ -154,6 +160,7 @@ class CollectionUpdateAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @extend_schema(
+        tags=['Collections'],
         request=CollectionSerializer,
         responses={
             204: None,
@@ -179,6 +186,7 @@ class CollectionUpdateAPIView(APIView):
 
 class ItemTagGetAPIView(APIView):
     @extend_schema(
+        tags=['ItemTags'],
         parameters=[
             OpenApiParameter(name='query', required=True, type=str),
         ],
