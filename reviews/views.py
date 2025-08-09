@@ -3,9 +3,9 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 
+from core.services import get_user_id
 
 from reviews.services import (
-    get_user_id,
     get_user_reviews,
     get_filters,
     get_tags,

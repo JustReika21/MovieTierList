@@ -1,8 +1,9 @@
 from django.http import Http404
 from django.shortcuts import render
 
+from core.services import get_user_id
+
 from user_profile.services import (
-    get_user_id,
     get_user_reviews,
     get_user_collections
 )

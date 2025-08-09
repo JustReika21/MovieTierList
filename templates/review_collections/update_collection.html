@@ -4,7 +4,7 @@
 
     <form
             id="createForm"
-            action="{% url 'api:collection-update' collection.id %}"
+            action="{% url 'api:collection-detail' collection.id %}"
             data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
     >
         {% csrf_token %}

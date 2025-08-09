@@ -20,7 +20,7 @@
                     <div class="item-actions">
                         <form
                             id="deleteForm"
-                            data-url="{% url 'api:collection-delete' collection.id %}"
+                            data-url="{% url 'api:collection-detail' collection.id %}"
                             data-redirect-url="{% url 'user_profile:user-profile' collection.user.username %}"
                         >
                             {% csrf_token %}
