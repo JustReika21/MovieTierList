@@ -14,7 +14,7 @@
             <div class="collection-info">
                 <h1 class="collection-title">{{ collection.title }}</h1>
                 <p class="collection-description">{{ collection.description }}</p>
-                <p class="collection-meta">Items in collection: {{ collection.count_reviews }}</p>
+                <p class="collection-meta">Reviews in collection: {{ collection.count_reviews }}</p>
             
                 {% if collection.user == request.user %}
                     <div class="item-actions">

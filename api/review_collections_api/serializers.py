@@ -30,8 +30,3 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     def validate_cover(self, cover):
         return cover_validator(cover)
-
-    def validate_reviews(self, reviews):
-        if not reviews:
-            raise ValidationError('You must choose at least one review')
-        return reviews
