@@ -88,22 +88,22 @@ paths:
           description: Forbidden
         '404':
           description: Collection not found
-  /api/v1/items/:
+  /api/v1/reviews/:
     post:
-      operationId: v1_items_create
+      operationId: v1_reviews_create
       tags:
-      - Items
+      - Review
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Item'
+              $ref: '#/components/schemas/Review'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Item'
+              $ref: '#/components/schemas/Review'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Item'
+              $ref: '#/components/schemas/Review'
         required: true
       security:
       - cookieAuth: []
@@ -113,32 +113,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/Review'
           description: ''
         '400':
           description: Validation Error
-  /api/v1/items/{item_id}:
+  /api/v1/reviews/{review_id}:
     patch:
-      operationId: v1_items_partial_update
+      operationId: v1_reviews_partial_update
       parameters:
       - in: path
-        name: item_id
+        name: review_id
         schema:
           type: integer
         required: true
       tags:
-      - Items
+      - Reviews
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedItem'
+              $ref: '#/components/schemas/PatchedReview'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedItem'
+              $ref: '#/components/schemas/PatchedReview'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedItem'
+              $ref: '#/components/schemas/PatchedReview'
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -150,17 +150,17 @@ paths:
         '403':
           description: Forbidden
         '404':
-          description: Item not found
+          description: Review not found
     delete:
-      operationId: v1_items_destroy
+      operationId: v1_reviews_destroy
       parameters:
       - in: path
-        name: item_id
+        name: review_id
         schema:
           type: integer
         required: true
       tags:
-      - Items
+      - Reviews
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -170,10 +170,10 @@ paths:
         '403':
           description: Forbidden
         '404':
-          description: Item not found
-  /api/v1/items/search/:
+          description: Review not found
+  /api/v1/reviews/search/:
     get:
-      operationId: v1_items_search_list
+      operationId: v1_reviews_search_list
       parameters:
       - in: query
         name: query
@@ -186,7 +186,7 @@ paths:
           type: integer
         required: true
       tags:
-      - Items
+      - Reviews
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -198,7 +198,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ItemSearch'
+                  $ref: '#/components/schemas/ReviewSearch'
           description: ''
   /api/v1/tags/get/:
     get:
@@ -210,7 +210,7 @@ paths:
           type: string
         required: true
       tags:
-      - ItemTags
+      - ReviewTags
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -222,7 +222,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ItemTag'
+                  $ref: '#/components/schemas/ReviewTag'
           description: ''
 components:
   schemas:
@@ -237,13 +237,13 @@ components:
         cover:
           type: string
           format: uri
-        items:
+        reviews:
           type: array
           items:
             type: integer
             writeOnly: true
           writeOnly: true
-        items_details:
+        review_details:
           type: array
           items:
             type: integer
@@ -251,69 +251,10 @@ components:
         user:
           type: integer
       required:
-      - items
-      - items_details
+      - review_details
+      - reviews
       - title
       - user
-    Item:
-      type: object
-      properties:
-        title:
-          type: string
-          maxLength: 127
-        description:
-          type: string
-        rating:
-          allOf:
-          - $ref: '#/components/schemas/RatingEnum'
-          minimum: -32768
-          maximum: 32767
-        cover:
-          type: string
-          format: uri
-        tags:
-          type: array
-          items:
-            type: integer
-        user:
-          type: integer
-      required:
-      - rating
-      - title
-      - user
-    ItemSearch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        title:
-          type: string
-          maxLength: 127
-        rating:
-          allOf:
-          - $ref: '#/components/schemas/RatingEnum'
-          minimum: -32768
-          maximum: 32767
-        cover:
-          type: string
-          format: uri
-      required:
-      - id
-      - rating
-      - title
-    ItemTag:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 127
-      required:
-      - id
-      - name
     PatchedCollection:
       type: object
       properties:
@@ -325,20 +266,20 @@ components:
         cover:
           type: string
           format: uri
-        items:
+        reviews:
           type: array
           items:
             type: integer
             writeOnly: true
           writeOnly: true
-        items_details:
+        review_details:
           type: array
           items:
             type: integer
           readOnly: true
         user:
           type: integer
-    PatchedItem:
+    PatchedReview:
       type: object
       properties:
         title:
@@ -384,6 +325,65 @@ components:
         * `8` - 8
         * `9` - 9
         * `10` - 10
+    Review:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 127
+        description:
+          type: string
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -32768
+          maximum: 32767
+        cover:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: integer
+        user:
+          type: integer
+      required:
+      - rating
+      - title
+      - user
+    ReviewSearch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 127
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -32768
+          maximum: 32767
+        cover:
+          type: string
+          format: uri
+      required:
+      - id
+      - rating
+      - title
+    ReviewTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 127
+      required:
+      - id
+      - name
   securitySchemes:
     basicAuth:
       type: http

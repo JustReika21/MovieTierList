@@ -2,8 +2,8 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404
 
 from accounts.models import Account
-from item_collections.models import Collection
-from items.models import Item
+from review_collections.models import Collection
+from reviews.models import Review
 
 
 def get_user_id(username):
@@ -11,19 +11,19 @@ def get_user_id(username):
     return get_object_or_404(Account, username=username).id
 
 
-def get_user_items(user_id, limit=5):
+def get_user_reviews(user_id, limit=5):
     """
-    Retrieve items belonging to the given user ID with the given limit,
+    Retrieve reviews belonging to the given user ID with the given limit,
     ordered by latest.
 
     Args:
         user_id (int): ID of the user
-        limit (int): Number of items to return
+        limit (int): Number of reviews to return
 
     Returns:
-        Queryset[Item]: Items with prefetched tags.
+        Queryset[Review]: Reviews with prefetched tags.
     """
-    return Item.objects.prefetch_related('tags').filter(
+    return Review.objects.prefetch_related('tags').filter(
         user=user_id
     ).order_by('-id')[:limit]
 
@@ -35,12 +35,12 @@ def get_user_collections(user_id, limit=5):
 
     Args:
         user_id (int): ID of the user
-        limit (int): Number of items to return
+        limit (int): Number of reviews to return
 
     Returns:
-        Queryset[Collection]: Collections with count items belonging to this
+        Queryset[Collection]: Collections with count reviews belonging to this
         collection.
     """
     return Collection.objects.filter(
         user=user_id
-    ).annotate(count_items=Count('items')).order_by('-id')[:limit]
+    ).annotate(count_reviews=Count('reviews')).order_by('-id')[:limit]

@@ -7,7 +7,7 @@
     <h1 style="text-align: center; padding-top: 10px">Reviews</h1>
     <div class="profile-container">
         {% if request.user.id == user_id %}
-        <a href="{% url 'items:create-item' %}" style="text-decoration: none">
+        <a href="{% url 'reviews:create-review' %}" style="text-decoration: none">
             <div class="item-card">
                 <div class="img-container">
                     <img src="{% static 'img/plus.png' %}" alt="Обложка">
@@ -24,16 +24,16 @@
             </div>
         </a>
         {% endif %}
-            {% include 'includes/items.html' %}
+            {% include 'includes/reviews.html' %}
     </div>
     <div class="buttons">
-        <a href="{% url 'items:all-items' username %}" class="manage-button">All reviews</a>
+        <a href="{% url 'reviews:all-reviews' username %}" class="manage-button">All reviews</a>
     </div>
     <h1 style="text-align: center;">Collections</h1>
 
     <div class="profile-container">
         {% if request.user.id == user_id %}
-            <a href="{% url 'item_collections:create-collection' %}" style="text-decoration: none">
+            <a href="{% url 'review_collections:create-collection' %}" style="text-decoration: none">
                 <div class="item-card">
                     <div class="img-container">
                         <img src="{% static 'img/plus.png' %}" alt="Обложка">
@@ -50,6 +50,6 @@
         {% include 'includes/collections.html' %}
     </div>
     <div class="buttons">
-        <a href="{% url 'item_collections:all-collections' username %}" class="manage-button">All collections</a>
+        <a href="{% url 'review_collections:all-collections' username %}" class="manage-button">All collections</a>
     </div>
 {% endblock %}

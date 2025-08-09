@@ -13,7 +13,7 @@
         </label>
         <ul class="navbar-menu">
             {% if request.user.is_authenticated %}
-                <li><a href="{% url 'items:create-item' %}">Create review</a></li>
+                <li><a href="{% url 'reviews:create-review' %}">Create review</a></li>
                 <li><a href="{% url 'user_profile:user-profile' request.user.username %}">Profile</a></li>
             	<li>
                     <form method="post" action="{% url 'accounts:logout' %}">

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <form
+            id="createForm"
+            action="{% url 'api:collection-update' collection.id %}"
+            data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
+    >
+        {% csrf_token %}
+        <label for="id_title">Title:</label>
+        <input type="text" name="title" id="id_title" maxlength="127" value="{{ collection.title }}" required>
+
+        <label for="id_description">Description:</label>
+        <textarea name="description" id="id_description">{{ collection.description }}</textarea>
+
+        <label for="id_cover">Cover Image:</label>
+        <input type="file" name="cover" id="id_cover" value="{{ collection.cover.url }}">
+
+        <label for="id_items">Items:</label>
+        <select name="reviews" id="id_items" multiple>
+            {% for review in all_reviews %}
+            	<option
+                        value="{{ review.id }}"
+                        {% if review.id in selected_review_ids %}
+                            selected="selected"
+                        {% endif %}
+                >{{ review.title }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
+        <button type="submit">Save</button>
+    </form>
+
+    <script src="{% static 'js/items/update_item.js' %}"></script>
+{% endblock %}

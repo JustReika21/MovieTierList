@@ -2,8 +2,8 @@ from PIL import Image
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from item_collections.models import Collection
-from items.models import Item, ItemTag
+from review_collections.models import Collection
+from reviews.models import Review, ReviewTag
 
 IMG_FORMATS = ('jpg', 'jpeg', 'png')
 
@@ -44,9 +44,9 @@ def cover_validator(cover):
     return cover
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
+        model = Review
         fields = ['title', 'description', 'rating', 'cover', 'tags', 'user']
 
     def validate_cover(self, cover):
@@ -58,23 +58,23 @@ class ItemSerializer(serializers.ModelSerializer):
         return tags
 
 
-class ItemSearchSerializer(serializers.ModelSerializer):
+class ReviewSearchSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
+        model = Review
         fields = ['id', 'title', 'rating', 'cover']
 
 
-class UserOwnedItemPKField(serializers.PrimaryKeyRelatedField):
+class UserOwnedReviewPKField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         user = self.context['request'].user
-        return Item.objects.filter(user=user)
+        return Review.objects.filter(user=user)
 
 
 class CollectionSerializer(serializers.ModelSerializer):
-    items = UserOwnedItemPKField(many=True, write_only=True)
+    reviews = UserOwnedReviewPKField(many=True, write_only=True)
 
-    items_details = serializers.PrimaryKeyRelatedField(
-        source='items',
+    review_details = serializers.PrimaryKeyRelatedField(
+        source='reviews',
         many=True,
         read_only=True
     )
@@ -82,19 +82,19 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = [
-            'title', 'description', 'cover', 'items', 'items_details', 'user'
+            'title', 'description', 'cover', 'reviews', 'review_details', 'user'
         ]
 
     def validate_cover(self, cover):
         return cover_validator(cover)
 
-    def validate_items(self, items):
-        if not items:
-            raise ValidationError('You must choose at least one item')
-        return items
+    def validate_reviews(self, reviews):
+        if not reviews:
+            raise ValidationError('You must choose at least one review')
+        return reviews
 
 
-class ItemTagSerializer(serializers.ModelSerializer):
+class ReviewTagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ItemTag
+        model = ReviewTag
         fields = '__all__'

@@ -14,7 +14,7 @@ itemSearchInput.addEventListener('input', () => {
   }
 
   searchTimeout = setTimeout(() => {
-    fetch(`/api/v1/items/search/?user_id=${userId}&query=${encodeURIComponent(q)}`)
+    fetch(`/api/v1/reviews/search/?user_id=${userId}&query=${encodeURIComponent(q)}`)
       .then(res => res.json())
       .then(data => {
         itemSearchResults.innerHTML = '';
@@ -28,18 +28,18 @@ itemSearchInput.addEventListener('input', () => {
           return;
         }
 
-        data.forEach(item => {
+        data.forEach(review => {
           const li = document.createElement('li');
           li.classList.add('item-search-result');
           li.innerHTML = `
-            <img src="${item.cover}" class="item-search-cover" alt="Cover">
+            <img src="${review.cover}" class="item-search-cover" alt="Cover">
             <div class="item-search-text">
-              <h4>${item.title}</h4>
-              <p>Rating: ${item.rating}</p>
+              <h4>${review.title}</h4>
+              <p>Rating: ${review.rating}</p>
             </div>
           `;
           li.addEventListener('click', () => {
-            window.location.href = `/items/info/${item.id}`;
+            window.location.href = `../../../reviews/info/${review.id}`;
           });
           itemSearchResults.appendChild(li);
         });

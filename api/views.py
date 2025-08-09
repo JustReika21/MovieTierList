@@ -12,71 +12,69 @@ from drf_spectacular.utils import (
 )
 
 from api.serializers import (
-    ItemSerializer,
+    ReviewSerializer,
     CollectionSerializer,
-    ItemTagSerializer,
-    ItemSearchSerializer
+    ReviewTagSerializer,
+    ReviewSearchSerializer
 )
-from item_collections.models import Collection
-from items.models import Item, ItemTag
+from review_collections.models import Collection
+from reviews.models import Review, ReviewTag
 from api.permissions import IsOwner
 
 
-@extend_schema(tags=['Items'])
-class ItemCreateAPIView(APIView):
+@extend_schema(tags=['Reviews'])
+class ReviewCreateAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     @extend_schema(
-        tags=['Items'],
-        request=ItemSerializer,
+        request=ReviewSerializer,
         responses={
-            201: ItemSerializer,
+            201: ReviewSerializer,
             400: OpenApiResponse(description='Validation Error')
         },
     )
     def post(self, request):
-        serializer = ItemSerializer(data=request.data)
+        serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@extend_schema(tags=['Items'])
-class ItemUpdateDeleteAPIView(APIView):
+@extend_schema(tags=['Reviews'])
+class ReviewUpdateDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @extend_schema(
-        tags=['Items'],
-        request=ItemSerializer,
+        request=ReviewSerializer,
         responses={
             204: None,
             403: OpenApiResponse(description='Forbidden'),
-            404: OpenApiResponse(description='Item not found')
+            404: OpenApiResponse(description='Review not found')
         },
     )
-    def delete(self, request, item_id):
-        item = get_object_or_404(Item, id=item_id)
-        self.check_object_permissions(request, item)
-        item.delete()
+    def delete(self, request, review_id):
+        review = get_object_or_404(Review, id=review_id)
+        self.check_object_permissions(request, review)
+        review.delete()
         return Response(
             status=status.HTTP_204_NO_CONTENT
         )
 
     @extend_schema(
-        request=ItemSerializer,
+        request=ReviewSerializer,
         responses={
             200: None,
             400: OpenApiResponse(description='Validation Error'),
             403: OpenApiResponse(description='Forbidden'),
-            404: OpenApiResponse(description='Item not found')
+            404: OpenApiResponse(description='Review not found')
         },
     )
-    def patch(self, request, item_id):
-        item = get_object_or_404(Item, id=item_id)
-        self.check_object_permissions(request, item)
-        serializer = ItemSerializer(
-            instance=item,
+    def patch(self, request, review_id):
+        review = get_object_or_404(Review, id=review_id)
+        self.check_object_permissions(request, review)
+        serializer = ReviewSerializer(
+            instance=review,
             data=request.data,
             partial=True
         )
@@ -86,27 +84,27 @@ class ItemUpdateDeleteAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ItemSearchAPIView(APIView):
+class ReviewSearchAPIView(APIView):
     @extend_schema(
-        tags=['Items'],
+        tags=['Reviews'],
         parameters=[
             OpenApiParameter(name='user_id', required=True, type=int),
             OpenApiParameter(name='query', required=True, type=str),
         ],
-        responses={200: ItemSearchSerializer(many=True)}
+        responses={200: ReviewSearchSerializer(many=True)}
     )
     def get(self, request):
         user_id = request.query_params.get('user_id', None)
         query = request.query_params.get('query', 'a')
 
         if user_id:
-            item = Item.objects.filter(
+            review = Review.objects.filter(
                 user=user_id,
                 title__icontains=query
             )[:5]
-            serializer = ItemSearchSerializer(item, many=True)
+            serializer = ReviewSearchSerializer(review, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Item.objects.none()
+        return Review.objects.none()
 
 
 class CollectionCreateAPIView(APIView):
@@ -181,17 +179,17 @@ class CollectionUpdateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ItemTagGetAPIView(APIView):
+class ReviewTagGetAPIView(APIView):
     @extend_schema(
-        tags=['ItemTags'],
+        tags=['ReviewTags'],
         parameters=[
             OpenApiParameter(name='query', required=True, type=str),
         ],
-        responses={200: ItemTagSerializer(many=True)}
+        responses={200: ReviewTagSerializer(many=True)}
     )
     def get(self, request):
         query = request.query_params.get('query', 'a')
 
-        tags = ItemTag.objects.filter(name__icontains=query)[:5]
-        serializer = ItemTagSerializer(tags, many=True)
+        tags = ReviewTag.objects.filter(name__icontains=query)[:5]
+        serializer = ReviewTagSerializer(tags, many=True)
         return Response(serializer.data)

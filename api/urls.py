@@ -6,20 +6,20 @@ app_name = 'api'
 
 urlpatterns = [
     path(
-        'v1/items/',
-        views.ItemCreateAPIView.as_view(),
-        name='item-list'
+        'v1/reviews/',
+        views.ReviewCreateAPIView.as_view(),
+        name='review-list'
     ),
     path(
-        'v1/items/<int:item_id>',
-        views.ItemUpdateDeleteAPIView.as_view(),
-        name='item-detail'
+        'v1/reviews/<int:review_id>',
+        views.ReviewUpdateDeleteAPIView.as_view(),
+        name='review-detail'
     ),
 
     path(
-        'v1/items/search/',
-        views.ItemSearchAPIView.as_view(),
-        name='item-search'
+        'v1/reviews/search/',
+        views.ReviewSearchAPIView.as_view(),
+        name='review-search'
     ),
 
     path(
@@ -40,7 +40,7 @@ urlpatterns = [
 
     path(
         'v1/tags/get/',
-        views.ItemTagGetAPIView.as_view(),
+        views.ReviewTagGetAPIView.as_view(),
         name='tag-get'
     ),
 ]

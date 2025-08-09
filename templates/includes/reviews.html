@@ -1,0 +1,24 @@
+{% for review in reviews %}
+    <a href="{% url 'reviews:review-info' review.id %}" style="text-decoration: none">
+        <div class="item-card">
+            <div class="img-container">
+                <img src="{{ review.cover.url }}" alt="Обложка">
+            </div>
+            <div class="item-content">
+                <h2>{{ review.title }}</h2>
+                <p class="description">
+                    {% if review.description %}
+                        {{ review.description }}
+                    {% else %}
+                        <span style="color: #666666">No description</span>
+                    {% endif %}
+                </p>
+                <div class="item-tags">
+                    {% for tag in review.tags.all %}
+                        {{ tag }}{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </a>
+{% endfor %}
