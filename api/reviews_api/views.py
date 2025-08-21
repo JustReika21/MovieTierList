@@ -34,6 +34,7 @@ class ReviewCreateAPIView(APIView):
     )
     def post(self, request):
         serializer = ReviewSerializer(data=request.data)
+        self.check_object_permissions(request, request.user)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -43,6 +44,28 @@ class ReviewCreateAPIView(APIView):
 @extend_schema(tags=['Reviews'])
 class ReviewUpdateDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
+
+    @extend_schema(
+        request=ReviewSerializer,
+        responses={
+            200: ReviewSerializer,
+            400: OpenApiResponse(description='Validation Error'),
+            403: OpenApiResponse(description='Forbidden'),
+            404: OpenApiResponse(description='Review not found')
+        },
+    )
+    def patch(self, request, review_id):
+        review = get_object_or_404(Review, id=review_id)
+        self.check_object_permissions(request, review)
+        serializer = ReviewSerializer(
+            instance=review,
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
         request=ReviewSerializer,
@@ -59,28 +82,6 @@ class ReviewUpdateDeleteAPIView(APIView):
         return Response(
             status=status.HTTP_204_NO_CONTENT
         )
-
-    @extend_schema(
-        request=ReviewSerializer,
-        responses={
-            200: None,
-            400: OpenApiResponse(description='Validation Error'),
-            403: OpenApiResponse(description='Forbidden'),
-            404: OpenApiResponse(description='Review not found')
-        },
-    )
-    def patch(self, request, review_id):
-        review = get_object_or_404(Review, id=review_id)
-        self.check_object_permissions(request, review)
-        serializer = ReviewSerializer(
-            instance=review,
-            data=request.data,
-            partial=True
-        )
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReviewSearchAPIView(APIView):

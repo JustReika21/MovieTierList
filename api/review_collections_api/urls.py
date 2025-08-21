@@ -9,7 +9,7 @@ urlpatterns = [
         name='collection-list'
     ),
     path(
-        'v1/collections/<int:collection_id>',
+        'v1/collections/<int:collection_id>/',
         views.CollectionUpdateDeleteAPIView.as_view(),
         name='collection-detail'
     ),

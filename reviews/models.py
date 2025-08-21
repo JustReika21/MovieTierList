@@ -1,5 +1,4 @@
-from time import time
-
+from uuid import uuid4
 from django.db import models
 
 from movie_tier_list import settings
@@ -8,8 +7,7 @@ from reviews.validators import validate_description_length
 
 def cover_upload_to_path(instance, filename):
     img_format = filename.split('.')[-1].lower()
-    timestamp = str(time())
-    return f'reviews/{str(instance.user)}_{timestamp}.{img_format}'
+    return f'reviews/{uuid4()}.{img_format}'
 
 
 class ReviewTag(models.Model):

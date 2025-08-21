@@ -12,7 +12,8 @@ def delete_old_cover_on_update(sender, instance, **kwargs):
         return
     old_file = sender.objects.get(id=instance.id).cover
     if os.path.basename(old_file.name) != 'default.jpg':
-        old_file.delete(save=False)
+        if instance.cover != old_file:
+            old_file.delete(save=False)
 
 
 @receiver(post_delete, sender=Review, dispatch_uid="review_delete_old_cover_on_delete")

@@ -5,7 +5,7 @@ from reviews.models import Review, ReviewTag
 
 @admin.register(ReviewTag)
 class ItemTagAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('id', 'name',)
 
 
 @admin.register(Review)

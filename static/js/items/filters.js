@@ -16,7 +16,7 @@ tagInput.addEventListener('input', () => {
   }
 
   tagTimeout = setTimeout(() => {
-    fetch(`/api/v1/tags/get/?query=${q}`)
+    fetch(`/api/v1/tags/?query=${q}`)
       .then(res => res.json())
       .then(data => {
         suggestions.innerHTML = '';

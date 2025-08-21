@@ -9,7 +9,7 @@ urlpatterns = [
         name='review-list'
     ),
     path(
-        'v1/reviews/<int:review_id>',
+        'v1/reviews/<int:review_id>/',
         views.ReviewUpdateDeleteAPIView.as_view(),
         name='review-detail'
     ),
@@ -20,7 +20,7 @@ urlpatterns = [
         name='review-search'
     ),
     path(
-        'v1/tags/get/',
+        'v1/tags/',
         views.ReviewTagGetAPIView.as_view(),
         name='tag-get'
     ),

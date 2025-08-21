@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from review_collections.models import Collection
 from reviews.models import Review
@@ -22,10 +21,18 @@ class CollectionSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Collection
         fields = [
-            'title', 'description', 'cover', 'reviews', 'review_details', 'user'
+            'id',
+            'title',
+            'description',
+            'cover',
+            'reviews',
+            'review_details',
+            'user'
         ]
 
     def validate_cover(self, cover):

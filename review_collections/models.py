@@ -1,5 +1,4 @@
-from time import time
-
+from uuid import uuid4
 from django.db import models
 
 from reviews.models import Review
@@ -9,8 +8,7 @@ from movie_tier_list import settings
 
 def cover_upload_to_path(instance, filename):
     img_format = filename.split('.')[-1].lower()
-    timestamp = str(time())
-    return f'collections/{str(instance.user)}_{timestamp}.{img_format}'
+    return f'collections/{uuid4()}.{img_format}'
 
 
 class Collection(models.Model):

@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from reviews.models import Review, ReviewTag
 
@@ -7,17 +6,14 @@ from api.services import cover_validator
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Review
-        fields = ['title', 'description', 'rating', 'cover', 'tags', 'user']
+        fields = ['id', 'title', 'description', 'rating', 'cover', 'tags', 'user']
 
     def validate_cover(self, cover):
         return cover_validator(cover)
-
-    def validate_tags(self, tags):
-        if not tags:
-            raise ValidationError('You must chose at least one tag')
-        return tags
 
 
 class ReviewSearchSerializer(serializers.ModelSerializer):
