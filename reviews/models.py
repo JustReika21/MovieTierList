@@ -18,7 +18,7 @@ class ReviewTag(models.Model):
 
 
 class ReviewType(models.Model):
-    name = models.CharField(max_length=127)
+    name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name
@@ -35,8 +35,18 @@ class Review(models.Model):
         upload_to=cover_upload_to_path,
         default='reviews/default.jpg',
     )
-    tags = models.ManyToManyField(ReviewTag, blank=True, related_name='reviews')
-    # type = models.ForeignKey(ReviewType, on_delete=models.CASCADE, related_name='reviews')
+    tags = models.ManyToManyField(
+        ReviewTag,
+        blank=True,
+        related_name='reviews'
+    )
+    type = models.ForeignKey(
+        ReviewType,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

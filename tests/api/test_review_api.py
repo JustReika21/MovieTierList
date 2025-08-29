@@ -57,11 +57,14 @@ class TestReviewsAPI:
         ('А', '', 5),
     ])
     def test_03_create_review_with_valid_data(
-        self, auth_user_client, create_tags, fill_data_for_review,
+        self, auth_user_client, create_tags, create_type, fill_data_for_review,
         title, description, rating
     ):
         tags = create_tags(2)
-        data = fill_data_for_review(title, description, rating, tags)
+        review_type = create_type()
+        data = fill_data_for_review(
+            title, description, rating, tags, review_type
+        )
         response = auth_user_client.post(reverse('api:review-list'), data=data)
         assert response.status_code == 201, response.data
         body = response.json()
@@ -69,6 +72,7 @@ class TestReviewsAPI:
         assert body['description'] == description
         assert body['rating'] == rating
         assert body['tags'] == [tag.id for tag in tags]
+        assert body['type'] == review_type.id
         assert body['cover'] == self.default_review_cover_path
 
     @pytest.mark.django_db
@@ -111,12 +115,15 @@ class TestReviewsAPI:
         ('А', '', 5),
     ])
     def test_05_update_review_with_valid_data_by_creator(
-        self, user, auth_user_client, create_tags, create_review,
+        self, user, auth_user_client, create_tags, create_review, create_type,
         fill_data_for_review, title, description, rating
     ):
         review = create_review(user)
         tags = create_tags(5)
-        data = fill_data_for_review(title, description, rating, tags)
+        review_type = create_type()
+        data = fill_data_for_review(
+            title, description, rating, tags, review_type
+        )
         response = auth_user_client.patch(
             reverse(
                 'api:review-detail',
@@ -127,10 +134,11 @@ class TestReviewsAPI:
 
         body = response.json()
         assert response.status_code == 200, body
-        assert body['title'] == data['title']
-        assert body['description'] == data['description']
-        assert body['rating'] == data['rating']
+        assert body['title'] == title
+        assert body['description'] == description
+        assert body['rating'] == rating
         assert body['tags'] == [tag.id for tag in tags]
+        assert body['type'] == review_type.id
         assert body['cover'] == self.default_review_cover_path
 
     @pytest.mark.django_db

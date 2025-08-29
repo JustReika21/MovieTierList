@@ -10,7 +10,16 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['id', 'title', 'description', 'rating', 'cover', 'tags', 'user']
+        fields = [
+            'id',
+            'title',
+            'description',
+            'rating',
+            'cover',
+            'type',
+            'tags',
+            'user'
+        ]
 
     def validate_cover(self, cover):
         return cover_validator(cover)

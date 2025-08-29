@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404
 
-from reviews.models import ReviewTag, Review
+from reviews.models import ReviewTag, Review, ReviewType
 
 
-def get_filters(tag_filter, rating_filter):
+def get_filters(tag_filter, rating_filter, review_type):
     """
     Construct a dictionary of filters for querying reviews.
 
@@ -20,6 +20,8 @@ def get_filters(tag_filter, rating_filter):
         filters['tags__name'] = tag_filter
     if rating_filter:
         filters['rating'] = rating_filter
+    if review_type:
+        filters['type'] = review_type
 
     return filters
 
@@ -57,6 +59,11 @@ def get_review_details(review_id):
 def get_tags():
     """Return QuerySet of all tags"""
     return ReviewTag.objects.all()
+
+
+def get_types():
+    """ Return list of all review types"""
+    return ReviewType.objects.all()
 
 
 def get_selected_tags_ids(review):

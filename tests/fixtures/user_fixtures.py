@@ -24,7 +24,7 @@ def user_2(django_user_model):
 @pytest.fixture
 def auth_user_client(user):
     client = APIClient()
-    client.force_authenticate(user=user)
+    client.force_login(user)
 
     return client
 
@@ -32,7 +32,7 @@ def auth_user_client(user):
 @pytest.fixture
 def auth_user_client_2(user_2):
     client = APIClient()
-    client.force_authenticate(user=user_2)
+    client.force_login(user_2)
 
     return client
 

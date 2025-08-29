@@ -20,7 +20,14 @@
                 <option value="{{ rating }}">{{ rating }}</option>
             {% endfor %}
         </select>
-    
+
+        <label for="id_type">Type:</label>
+        <select name="type" id="id_type" required>
+            {% for type in types %}
+            	<option value="{{ type.id }}">{{ type.name }}</option>
+            {% endfor %}
+        </select>
+
         <label for="id_cover">Cover Image:</label>
         <input type="file" name="cover" id="id_cover">
     

@@ -11,6 +11,7 @@ from reviews.services import (
     get_tags,
     get_review_details,
     get_selected_tags_ids,
+    get_types
 )
 
 
@@ -18,8 +19,9 @@ def all_reviews(request, username):
     user_id = get_user_id(username)
     tag_filter = request.GET.get('tag_filter', None)
     rating_filter = request.GET.get('rating_filter', None)
+    review_type = request.GET.get('review_type', None)
 
-    filters = get_filters(tag_filter, rating_filter)
+    filters = get_filters(tag_filter, rating_filter, review_type)
 
     reviews = get_user_reviews(user_id, filters)
 
@@ -49,16 +51,18 @@ def review_info(request, review_id):
 @login_required
 def create_review(request):
     tags = get_tags()
+    types = get_types()
     context = {
         'tags': tags,
-        'ratings': (i for i in range(1, 11))
+        'ratings': (i for i in range(1, 11)),
+        'types': types
     }
     return render(request, 'reviews/create_review.html', context)
 
 
 @login_required
-def update_review(request, item_id):
-    review = get_review_details(item_id)
+def update_review(request, review_id):
+    review = get_review_details(review_id)
 
     if review.user_id != request.user.id:
         return HttpResponseForbidden(

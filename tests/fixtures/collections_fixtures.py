@@ -1,7 +1,8 @@
 import pytest
 
 from review_collections.models import Collection
-from tests.factories import ReviewFactory
+from tests.factories import CollectionFactory, ReviewFactory
+
 
 @pytest.fixture
 def fill_data_for_collection():
@@ -25,7 +26,13 @@ def create_collection():
 
 
 @pytest.fixture
-def create_reviews():
-    def _create(count_reviews=1, user=None):
-        return ReviewFactory.create_batch(count_reviews, user=user)
+def create_collections():
+    def _create(collection_count=1, user=None):
+        reviews = ReviewFactory.create_batch(5, user=user)
+        collections = CollectionFactory.create_batch(collection_count, user=user)
+
+        for collection in collections:
+            collection.reviews.set(reviews)
+
+        return collections
     return _create

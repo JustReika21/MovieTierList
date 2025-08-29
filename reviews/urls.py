@@ -21,7 +21,7 @@ urlpatterns = [
         name='create-review'
     ),
     path(
-        'update/<int:item_id>/',
+        'update/<int:review_id>/',
         views.update_review,
         name='update-review'
     ),

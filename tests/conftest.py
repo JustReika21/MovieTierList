@@ -1,4 +1,6 @@
-from fixtures.common_fixtures import *
-from fixtures.review_fixtures import *
-from fixtures.collections_fixtures import *
-from fixtures.user_fixtures import *
+pytest_plugins = [
+    "fixtures.common_fixtures",
+    "fixtures.user_fixtures",
+    "fixtures.review_fixtures",
+    "fixtures.collections_fixtures",
+]

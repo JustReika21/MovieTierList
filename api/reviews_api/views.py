@@ -100,7 +100,7 @@ class ReviewSearchAPIView(APIView):
         if user_id:
             review = Review.objects.filter(
                 user=user_id,
-                title__icontains=query
+                title__icontains=query,
             )[:5]
             serializer = ReviewSearchSerializer(review, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
