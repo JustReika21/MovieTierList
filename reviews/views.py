@@ -19,15 +19,17 @@ def all_reviews(request, username):
     user_id = get_user_id(username)
     tag_filter = request.GET.get('tag_filter', None)
     rating_filter = request.GET.get('rating_filter', None)
-    review_type = request.GET.get('review_type', None)
+    type_filter = request.GET.get('type_filter', None)
 
-    filters = get_filters(tag_filter, rating_filter, review_type)
+    filters = get_filters(tag_filter, rating_filter, type_filter)
 
     reviews = get_user_reviews(user_id, filters)
 
     paginator = Paginator(reviews, 10)
     page = request.GET.get('page', 1)
     page_obj = paginator.page(page)
+
+    types = get_types()
 
     context = {
         'username': username,
@@ -36,6 +38,8 @@ def all_reviews(request, username):
         'paginator': paginator,
         'tag_filter': tag_filter,
         'rating_filter': rating_filter,
+        'type_filter': type_filter,
+        'types': types
     }
     return render(request, 'reviews/all_reviews.html', context)
 

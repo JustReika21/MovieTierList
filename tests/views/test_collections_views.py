@@ -2,8 +2,8 @@ import pytest
 from django.urls import reverse
 
 
+@pytest.mark.django_db
 class TestCollectionsViews:
-    @pytest.mark.django_db
     def test_00_collections_list_view(
             self, user, user_2, client, create_collections
     ):
@@ -30,7 +30,6 @@ class TestCollectionsViews:
         assert response.status_code == 200
         assert len(response.context['page_obj']) == 0
 
-    @pytest.mark.django_db
     def test_01_collection_detail(self, user, client, create_collections):
         collection = create_collections(1, user)[0]
         response = client.get(
@@ -47,7 +46,6 @@ class TestCollectionsViews:
         assert response_collection.reviews == collection.reviews
         assert response_collection.user == collection.user
 
-    @pytest.mark.django_db
     def test_02_collection_detail_not_exist(self, client):
         response = client.get(
             reverse(
@@ -58,13 +56,11 @@ class TestCollectionsViews:
 
         assert response.status_code == 404
 
-    @pytest.mark.django_db
     def test_03_collection_create_login_required(self, client):
         response = client.get(reverse('review_collections:create-collection'))
 
         assert response.status_code == 302
 
-    @pytest.mark.django_db
     def test_04_collection_authenticated(
             self, user, user_2, auth_user_client, create_reviews
     ):
@@ -82,7 +78,6 @@ class TestCollectionsViews:
         expected_ids = {r.id for r in reviews}
         assert response_ids == expected_ids
 
-    @pytest.mark.django_db
     def test_05_update_collection_login_required(
             self, user, client, create_collection
     ):
@@ -96,7 +91,6 @@ class TestCollectionsViews:
 
         assert response.status_code == 302
 
-    @pytest.mark.django_db
     def test_06_update_collection_authenticated(
             self, user, auth_user_client, create_collections
     ):
@@ -115,7 +109,6 @@ class TestCollectionsViews:
         assert body.reviews == collection.reviews
         assert body.user == collection.user
 
-    @pytest.mark.django_db
     def test_07_update_collection_by_not_creator(
             self, user, auth_user_client_2, create_collection
     ):
@@ -129,7 +122,6 @@ class TestCollectionsViews:
 
         assert response.status_code == 403
 
-    @pytest.mark.django_db
     def test_08_update_collection_not_exist(self, auth_user_client):
         response = auth_user_client.get(
             reverse(

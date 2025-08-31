@@ -3,13 +3,14 @@ from django.shortcuts import get_object_or_404
 from reviews.models import ReviewTag, Review, ReviewType
 
 
-def get_filters(tag_filter, rating_filter, review_type):
+def get_filters(tag_filter, rating_filter, type_filter):
     """
     Construct a dictionary of filters for querying reviews.
 
     Args:
         tag_filter (str): Tag name to filter by.
         rating_filter (int): Rating to filter by.
+        type_filter (str): Type to filter by.
 
     Returns:
         dict: Query filters for review filtering. (field: filter)
@@ -20,8 +21,8 @@ def get_filters(tag_filter, rating_filter, review_type):
         filters['tags__name'] = tag_filter
     if rating_filter:
         filters['rating'] = rating_filter
-    if review_type:
-        filters['type'] = review_type
+    if type_filter:
+        filters['type__name'] = type_filter
 
     return filters
 
@@ -38,7 +39,9 @@ def get_user_reviews(user_id, filters):
     Returns:
         Queryset[Review]: All reviews belonging to the given user with filters.
     """
-    return Review.objects.prefetch_related(
+    return Review.objects.select_related(
+        'type'
+    ).prefetch_related(
         'tags'
     ).filter(user=user_id, **filters).order_by('-id')
 
@@ -51,9 +54,11 @@ def get_review_details(review_id):
         review_id (int): Review ID.
 
     Returns:
-        QuerySet[review]: Review details join with user.
+        QuerySet[review]: Review details join with user, types and tags.
     """
-    return get_object_or_404(Review.objects.select_related('user'), id=review_id)
+    return get_object_or_404(Review.objects.select_related(
+        'user', 'type'
+    ).prefetch_related('tags'), id=review_id)
 
 
 def get_tags():

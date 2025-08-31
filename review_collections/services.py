@@ -34,23 +34,48 @@ def get_collection(collection_id):
     """
     return get_object_or_404(
         Collection.objects.select_related('user').prefetch_related(
-            'reviews'
+            'reviews',
         ).annotate(count_reviews=Count('reviews')),
+        id=collection_id,
+    )
+
+
+def get_collection_with_review_info(collection_id):
+    """
+    Retrieve collection with review types and tags belonging to the given
+    collection ID or raise 404.
+
+    Args:
+        collection_id (int): ID of the collection
+
+    Returns:
+        Queryset[Collection]: Collection join with user and with prefetched
+        reviews belonging to this collection.
+    """
+    return get_object_or_404(
+        Collection.objects.select_related('user').prefetch_related(
+            'reviews', 'reviews__type', 'reviews__tags'
+        ).annotate(
+            count_reviews=Count('reviews')
+        ),
         id=collection_id
     )
 
 
 def get_user_reviews(user_id):
     """
-    Retrieve reviews belonging to the given user ID, ordered by latest.
+    Retrieve reviews ids and titles belonging to the given user ID, ordered by
+    latest.
 
     Args:
         user_id (int): ID of the user
 
     Returns:
-        Queryset[Review]: Reviews with prefetched tags.
+        Queryset[Review]: Reviews ids and titles
     """
-    return Review.objects.filter(user=user_id).prefetch_related('tags').order_by('-id')
+    return Review.objects.filter(
+        user=user_id
+    ).only('id', 'title').order_by('-id')
 
 
 def get_selected_review_ids(collection):

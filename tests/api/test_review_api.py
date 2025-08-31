@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 
 
+@pytest.mark.django_db
 class TestReviewsAPI:
     default_review_cover_path = '/media/reviews/default.jpg'
     invalid_image_size = 'invalid_image_size.png'
@@ -9,7 +10,6 @@ class TestReviewsAPI:
     valid_image2 = 'valid_image2.png'
     valid_image3 = 'valid_image3.jpeg'
 
-    @pytest.mark.django_db
     def test_00_create_review_not_auth(
         self, client, create_tags, fill_data_for_review
     ):
@@ -17,7 +17,6 @@ class TestReviewsAPI:
         response = client.post(reverse('api:review-list'), data=data)
         assert response.status_code == 403, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description, rating', [
         ('A' * 128, 'Description', 5),
         ('', 'Description', 5),
@@ -34,7 +33,6 @@ class TestReviewsAPI:
         response = auth_user_client.post(reverse('api:review-list'), data=data)
         assert response.status_code == 400, response.data
 
-    @pytest.mark.django_db
     def test_02_create_review_with_invalid_cover_size(
         self, auth_user_client, create_tags, fill_data_for_review,
         open_image_file
@@ -49,7 +47,6 @@ class TestReviewsAPI:
         )
         assert response.status_code == 400, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description, rating', [
         ('Title', 'Description', 10),
         ('Название', 'Описание', 1),
@@ -75,7 +72,6 @@ class TestReviewsAPI:
         assert body['type'] == review_type.id
         assert body['cover'] == self.default_review_cover_path
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('cover_name', [
         valid_image,
         valid_image2,
@@ -106,7 +102,6 @@ class TestReviewsAPI:
         )
         assert response.status_code == 204, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description, rating', [
         ('Updated', 'Review', 10,),
         ('Title', 'Description', 10),
@@ -141,7 +136,6 @@ class TestReviewsAPI:
         assert body['type'] == review_type.id
         assert body['cover'] == self.default_review_cover_path
 
-    @pytest.mark.django_db
     def test_06_update_cover_valid(
         self, user, auth_user_client, create_tags, create_review,
         fill_data_for_review, open_image_file
@@ -164,7 +158,6 @@ class TestReviewsAPI:
         response = auth_user_client.delete(f'/api/v1/reviews/{review.id}/')
         assert response.status_code == 204, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description, rating', [
         ('A' * 128, 'Description', 5),
         ('', 'Description', 5),
@@ -189,8 +182,7 @@ class TestReviewsAPI:
         )
 
         assert response.status_code == 400, response.data
-
-    @pytest.mark.django_db
+    
     def test_08_update_with_invalid_cover_size(
         self, user, auth_user_client, fill_data_for_review,
         open_image_file, create_review
@@ -207,7 +199,6 @@ class TestReviewsAPI:
         )
         assert response.status_code == 400, response.data
 
-    @pytest.mark.django_db
     def test_09_update_by_not_creator(
         self, user, auth_user_client_2, create_tags,
         create_review, fill_data_for_review
@@ -229,7 +220,6 @@ class TestReviewsAPI:
         )
         assert response.status_code == 403, response.data
 
-    @pytest.mark.django_db
     def test_10_update_not_exist_review(self, auth_user_client):
         data = {
             'title': 'Updated',
@@ -244,7 +234,6 @@ class TestReviewsAPI:
             data=data)
         assert response.status_code == 404, response.data
 
-    @pytest.mark.django_db
     def test_11_delete_review_by_creator(
         self, user, auth_user_client, create_review
     ):
@@ -257,7 +246,6 @@ class TestReviewsAPI:
         )
         assert response.status_code == 204, response.data
 
-    @pytest.mark.django_db
     def test_12_delete_review_by_not_creator(
         self, user, auth_user_client_2, create_review
     ):
@@ -269,8 +257,7 @@ class TestReviewsAPI:
             ),
         )
         assert response.status_code == 403, response.data
-
-    @pytest.mark.django_db
+    
     def test_13_delete_not_exist_review(self, auth_user_client):
         response = auth_user_client.delete(
             reverse(
@@ -280,7 +267,7 @@ class TestReviewsAPI:
         )
         assert response.status_code == 404, response.data
 
-    @pytest.mark.django_db
+    
     def test_14_get_review_tags_by_query(self, auth_user_client, create_tag):
         tag1 = create_tag('Created')
         tag2 = create_tag('USO')
@@ -294,7 +281,6 @@ class TestReviewsAPI:
         tag_ids = {tag['id'] for tag in response.json()}
         assert tag_ids == right_tag_ids, f"Expected {right_tag_ids}, got {tag_ids}"
 
-    @pytest.mark.django_db
     def test_15_get_reviews_by_query(
             self, user, auth_user_client, create_review
     ):
@@ -310,7 +296,6 @@ class TestReviewsAPI:
         review_ids = {review['id'] for review in response.json()}
         assert review_ids == right_review_ids, f"Expected {right_review_ids}, got {review_ids}"
 
-    @pytest.mark.django_db
     def test_16_get_limit_reviews_by_query(
             self, user, auth_user_client, create_review
     ):
@@ -323,8 +308,7 @@ class TestReviewsAPI:
 
         assert response.status_code == 200, response.data
         assert len(response.json()) == 5
-
-    @pytest.mark.django_db
+    
     def test_17_get_reviews_with_wrong_user_id(
             self, user, user_2, auth_user_client, create_review
     ):
@@ -336,8 +320,7 @@ class TestReviewsAPI:
 
         assert response.status_code == 200, response.data
         assert len(response.json()) == 0
-
-    @pytest.mark.django_db
+    
     def test_18_get_reviews_by_another_user(
             self, user, auth_user_client_2, create_review
     ):

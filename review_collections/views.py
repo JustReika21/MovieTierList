@@ -9,6 +9,7 @@ from review_collections.services import (
     get_user_reviews,
     get_user_collections,
     get_collection,
+    get_collection_with_review_info,
     get_selected_review_ids
 )
 
@@ -30,7 +31,7 @@ def all_collections(request, username):
 
 
 def collection_info(request, collection_id):
-    collection = get_collection(collection_id)
+    collection = get_collection_with_review_info(collection_id)
     context = {
         'collection': collection,
     }

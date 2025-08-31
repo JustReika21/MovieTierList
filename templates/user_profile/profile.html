@@ -17,14 +17,22 @@
                     <p class="description">
                         Create new review
                     </p>
-                    <div class="item-tags">
-                        New
+                    <div class="item-footer">
+                        <div class="item-type">
+                            Rating
+                        </div>
+                        <div class="item-type">
+                            Type
+                        </div>
+                        <div class="item-tags">
+                            New
+                        </div>
                     </div>
                 </div>
             </div>
         </a>
         {% endif %}
-            {% include 'includes/reviews.html' %}
+        {% include 'includes/reviews.html' %}
     </div>
     <div class="buttons">
         <a href="{% url 'reviews:all-reviews' username %}" class="manage-button">All reviews</a>
@@ -43,6 +51,11 @@
                         <p class="description">
                             Create new collection
                         </p>
+                        <div class="item-footer">
+                            <div class="item-tags">
+                                New
+                            </div>
+                        </div>
                     </div>
                 </div>
             </a>

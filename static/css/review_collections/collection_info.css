@@ -104,7 +104,6 @@
   .collection-cover {
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 5;
   }
 
   .collection-info {
@@ -112,13 +111,15 @@
     text-align: center;
   }
 
-  .item-card {
-    width: 100%;
-    max-width: 320px;
-  }
   .item-actions {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+}
+
+@media (max-width: 428px) {
+  .collection-block {
+    max-width: 90%;
   }
 }

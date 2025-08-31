@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 
 
+@pytest.mark.django_db
 class TestCollectionsApi:
     default_cover = 'default.jpg'
     invalid_image_size = 'invalid_image_size.png'
@@ -9,7 +10,6 @@ class TestCollectionsApi:
     valid_image2 = 'valid_image2.png'
     valid_image3 = 'valid_image3.jpeg'
 
-    @pytest.mark.django_db
     def test_00_create_collection_not_auth(
             self, client, fill_data_for_collection
     ):
@@ -19,7 +19,6 @@ class TestCollectionsApi:
         response = client.post(reverse('api:collection-list'), data=data)
         assert response.status_code == 403, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description', [
         ('A' * 128, 'Description'),
         ('', 'Description'),
@@ -34,7 +33,6 @@ class TestCollectionsApi:
         response = auth_user_client.post(reverse('api:collection-list'), data=data)
         assert response.status_code == 400, response.data
 
-    @pytest.mark.django_db
     def test_02_create_review_with_invalid_cover_size(
             self, user, auth_user_client, fill_data_for_collection,
             open_image_file, create_reviews
@@ -51,7 +49,6 @@ class TestCollectionsApi:
         )
         assert response.status_code == 400, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description', [
         ('Title', 'Description'),
         ('Название', 'Описание'),
@@ -76,7 +73,6 @@ class TestCollectionsApi:
         assert body['review_details'] == [review.id for review in reviews]
         assert body['cover'].split('/')[-1] == self.default_cover
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('cover_name', [
         valid_image,
         valid_image2,
@@ -106,7 +102,6 @@ class TestCollectionsApi:
         )
         assert response.status_code == 204, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description', [
         ('Updated', 'Review'),
         ('Title', 'Description'),
@@ -137,7 +132,6 @@ class TestCollectionsApi:
         assert body['review_details'] == [review.id for review in reviews]
         assert body['cover'].split('/')[-1] == self.default_cover
 
-    @pytest.mark.django_db
     def test_06_update_cover_valid(
             self, user, auth_user_client, create_collection, open_image_file
     ):
@@ -163,7 +157,6 @@ class TestCollectionsApi:
         )
         assert response.status_code == 204, response.data
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('title, description', [
         ('A' * 128, 'Description'),
         ('', 'Description'),
@@ -205,7 +198,6 @@ class TestCollectionsApi:
 
         assert response.status_code == 400, response.data
 
-    @pytest.mark.django_db
     def test_09_update_with_invalid_cover_size(
             self, user, auth_user_client, fill_data_for_collection,
             open_image_file, create_collection
@@ -240,7 +232,6 @@ class TestCollectionsApi:
 
         assert response.status_code == 403, response.data
 
-    @pytest.mark.django_db
     def test_11_update_not_exist_review(self, auth_user_client):
         data = {
             'title': 'Updated',
@@ -255,7 +246,6 @@ class TestCollectionsApi:
         )
         assert response.status_code == 404, response.data
 
-    @pytest.mark.django_db
     def test_12_delete_review_by_creator(
             self, user, auth_user_client, create_collection
     ):
@@ -268,7 +258,6 @@ class TestCollectionsApi:
         )
         assert response.status_code == 204, response.data
 
-    @pytest.mark.django_db
     def test_13_delete_review_by_not_creator(
             self, user, auth_user_client_2, create_collection
     ):
@@ -281,7 +270,6 @@ class TestCollectionsApi:
         )
         assert response.status_code == 403, response.data
 
-    @pytest.mark.django_db
     def test_14_delete_not_exist_review(self, auth_user_client):
         response = auth_user_client.delete(
             reverse(

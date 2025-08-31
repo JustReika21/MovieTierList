@@ -11,8 +11,8 @@
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  max-width: 260px;
-  height: 460px;
+  max-width: 320px;
+  height: 640px;
   flex: 1 1 240px;
   display: flex;
   flex-direction: column;
@@ -26,14 +26,13 @@
 
 .img-container {
   width: 100%;
-  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: #2a2a2a;
 }
 
 .img-container img {
-  width: 240px;
-  height: 300px;
+  width: 300px;
+  height: 360px;
   object-fit: cover;
   display: block;
 }
@@ -44,6 +43,13 @@
   padding: 12px;
   gap: 6px;
   flex-grow: 1;
+}
+
+.item-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .item-card h2 {
@@ -61,7 +67,7 @@
   color: #ccc;
   text-align: left;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -71,7 +77,8 @@
   hyphens: auto;
 }
 
-.item-tags {
+.item-tags,
+.item-type {
   font-size: 0.85rem;
   color: #aaa;
   text-align: left;
@@ -82,6 +89,10 @@
   text-overflow: ellipsis;
   min-height: 1.2em;
   white-space: nowrap;
+}
+
+.item-tags {
+  color: #ffcc00;
 }
 
 .buttons {
@@ -110,7 +121,7 @@
 
   .item-card {
     width: 100%;
-    max-width: 260px;
+    max-width: 280px;
   }
 
   .buttons {

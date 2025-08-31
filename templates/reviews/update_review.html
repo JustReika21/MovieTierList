@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <title>Update review {{ review.title }}</title>
     <form
             id="createForm"
             action="{% url 'api:review-detail' review.id %}"

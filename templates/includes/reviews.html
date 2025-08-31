@@ -13,10 +13,20 @@
                         <span style="color: #666666">No description</span>
                     {% endif %}
                 </p>
-                <div class="item-tags">
-                    {% for tag in review.tags.all %}
-                        {{ tag }}{% if not forloop.last %},{% endif %}
-                    {% endfor %}
+                <div class="item-footer">
+                    <div class="item-type">
+                        {{ review.rating }}/10
+                    </div>
+                    <div class="item-type">
+                        {{ review.type }}
+                    </div>
+                    <div class="item-tags">
+                        {% for tag in review.tags.all %}
+                            {{ tag }}{% if not forloop.last %},{% endif %}
+                        {% empty %}
+                            No tags
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,14 +2,13 @@
 {% load static %}
 {% block content %}
     <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
-    <link href="{% static 'css/items/items_all.css' %}" rel="stylesheet">
-    
-    <h1 class="text-center">{{ username }}'s reviews</h1>
-    
+    <link href="{% static 'css/reviews/reviews_all.css' %}" rel="stylesheet">
+    <title>{{ username }} reviews</title>
     <div class="page-layout">
         <aside class="filters-panel">
+            <h4 class="text-center">{{ username }} reviews</h4>
             <div class="item-search-wrapper">
-                <label for="item-search-input">Search {{ username }}'s review:</label>
+                <label for="item-search-input">Search review:</label>
                 <input
                     type="text"
                     id="item-search-input"
@@ -36,6 +35,20 @@
                         {% if rating_filter %} value="{{ rating_filter }}" {% endif %}
                     >
                 </div>
+
+                <div class="filter-group">
+                    <label for="type-input">Review Type:</label>
+                    <select id="type-input">
+                        <option value="">No Type</option>
+                            {% for type in types %}
+                                {% if type_filter == type.name%}
+                                	<option value="{{ type.name }}" selected>{{ type.name }}</option>
+                                {% else %}
+                                    <option value="{{ type.name }}">{{ type.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                    </select>
+                </div>
     
                 <div class="filter-buttons">
                     <button id="search-btn">Search</button>
@@ -58,13 +71,23 @@
                                     {% if review.description %}
                                         {{ review.description }}
                                     {% else %}
-                                        <span class="text-muted">No description</span>
+                                        <span style="color: #666666">No description</span>
                                     {% endif %}
                                 </p>
-                                <div class="item-tags">
-                                    {% for tag in review.tags.all %}
-                                        {{ tag }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
+                                <div class="item-footer">
+                                    <div class="item-type">
+                                        {{ review.rating }}/10
+                                    </div>
+                                    <div class="item-type">
+                                        {{ review.type }}
+                                    </div>
+                                    <div class="item-tags">
+                                        {% for tag in review.tags.all %}
+                                            {{ tag }}{% if not forloop.last %},{% endif %}
+                                        {% empty %}
+                                            No tags
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

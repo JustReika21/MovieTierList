@@ -5,7 +5,6 @@ from reviews.models import Review
 
 
 class TestReviewSignals:
-    @pytest.mark.django_db
     def test_00_delete_old_cover(self, user):
         old_file = SimpleUploadedFile(
             "old.jpg", b"old content", content_type="image/jpeg"

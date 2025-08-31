@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
     <link href="{% static 'css/user_profile/profile.css' %}" rel="stylesheet">
+    <title>{{ username }} collections</title>
     <h1 style="text-align: center">{{ username }}'s collections</h1>
     <div class="profile-container">
         {% for collection in page_obj %}
@@ -19,8 +20,10 @@
                                 <span style="color: #666666">No description</span>
                             {% endif %}
                         </p>
-                        <div class="item-tags">
-                            Reviews in collection: {{ collection.count_reviews }}
+                        <div class="item-footer">
+                            <div class="item-tags">
+                                Reviews in collection: {{ collection.count_reviews }}
+                            </div>
                         </div>
                     </div>
                 </div>

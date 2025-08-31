@@ -2,8 +2,7 @@
 {% load static %}
 {% block content %}
     <title>{{ collection.title }}</title>
-    {{ collection.user }}
-    <link rel="stylesheet" href="{% static 'css/items_collections/collection_info.css' %}">
+    <link rel="stylesheet" href="{% static 'css/review_collections/collection_info.css' %}">
     <link rel="stylesheet" href="{% static 'css/user_profile/profile.css' %}">
     <div class="collection-block">
         <div class="collection-header">
@@ -13,22 +12,30 @@
 
             <div class="collection-info">
                 <h1 class="collection-title">{{ collection.title }}</h1>
-                <p class="collection-description">{{ collection.description }}</p>
-                <p class="collection-meta">Reviews in collection: {{ collection.count_reviews }}</p>
-            
-                {% if collection.user == request.user %}
-                    <div class="item-actions">
-                        <form
-                            id="deleteForm"
-                            data-url="{% url 'api:collection-detail' collection.id %}"
-                            data-redirect-url="{% url 'user_profile:user-profile' collection.user.username %}"
-                        >
-                            {% csrf_token %}
-                            <button type="submit">Delete</button>
-                        </form>
-                        <a href="{% url 'review_collections:update-collection' collection.id %}">Update</a>
-                    </div>
+                {% if collection.description %}
+                    <p class="collection-description">{{ collection.description }}</p>
+                {% else %}
+                    <span style="color: #666666">No description</span>
                 {% endif %}
+
+
+                <div class="item-footer">
+                    <p class="collection-meta">Reviews in collection: {{ collection.count_reviews }}</p>
+                    <p class="collection-meta">Posted by: {{ collection.user }}</p>
+                    {% if collection.user == request.user %}
+                        <div class="item-actions">
+                            <form
+                                id="deleteForm"
+                                data-url="{% url 'api:collection-detail' collection.id %}"
+                                data-redirect-url="{% url 'user_profile:user-profile' collection.user.username %}"
+                            >
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                            <a href="{% url 'review_collections:update-collection' collection.id %}">Update</a>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="collection-items">
@@ -47,10 +54,20 @@
                                     <span style="color: #666666">No description</span>
                                 {% endif %}
                             </p>
-                            <div class="item-tags">
-                                {% for tag in review.tags.all %}
-                                    {{ tag }}{% if not forloop.last %},{% endif %}
-                                {% endfor %}
+                            <div class="item-footer">
+                                <div class="item-type">
+                                    {{ review.rating }}/10
+                                </div>
+                                <div class="item-type">
+                                    {{ review.type }}
+                                </div>
+                                <div class="item-tags">
+                                    {% for tag in review.tags.all %}
+                                        {{ tag }}{% if not forloop.last %},{% endif %}
+                                    {% empty %}
+                                        No tags
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>

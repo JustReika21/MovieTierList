@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <link href="{% static 'css/items/item_info.css' %}" rel="stylesheet">
-    
+    <link href="{% static 'css/reviews/review_info.css' %}" rel="stylesheet">
+    <title>{{ review.title }}</title>
     <div class="item-info-container">
         <div class="item-info-cover-wrapper">
             <img src="{{ review.cover.url }}" alt="Cover Image" class="item-info-cover">
@@ -28,7 +28,7 @@
                 {% if review.description %}
                     {{ review.description }}
                 {% else %}
-                    No description
+                    <span style="color: #666666">No description</span>
                 {% endif %}
             </div>
     

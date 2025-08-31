@@ -16,9 +16,9 @@ def get_user_reviews(user_id, limit=5):
     Returns:
         Queryset[Review]: Reviews with prefetched tags.
     """
-    return Review.objects.prefetch_related('tags').filter(
-        user=user_id
-    ).order_by('-id')[:limit]
+    return Review.objects.prefetch_related(
+        'tags'
+    ).select_related('type').filter(user=user_id).order_by('-id')[:limit]
 
 
 def get_user_collections(user_id, limit=5):
