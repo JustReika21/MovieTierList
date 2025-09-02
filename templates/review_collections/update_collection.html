@@ -1,37 +1,84 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <title>Update collection {{ collection.title }}</title>
+    <title>Update Collection {{ collection.title }}</title>
+
+    <link href="{% static 'css/reviews/review_create.css' %}" rel="stylesheet">
+    <link href="{% static 'css/review_collections/collection_create.css' %}" rel="stylesheet">
+
     <form
-            id="createForm"
-            action="{% url 'api:collection-detail' collection.id %}"
-            data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
+        id="createForm"
+        action="{% url 'api:collection-detail' collection.id %}"
+        method="post"
+        enctype="multipart/form-data"
+        data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
     >
         {% csrf_token %}
-        <label for="id_title">Title:</label>
-        <input type="text" name="title" id="id_title" maxlength="127" value="{{ collection.title }}" required>
+        <div class="item-info-container">
+            <aside class="item-info-cover-wrapper">
+                <input type="file" name="cover" id="id_cover" accept="image/*" hidden>
 
-        <label for="id_description">Description:</label>
-        <textarea name="description" id="id_description">{{ collection.description }}</textarea>
+                <div class="cover-upload" id="coverUpload" role="button" tabindex="0" aria-label="Choose cover">
+                    {% if collection.cover %}
+                        <img id="coverPreview" class="item-info-cover" src="{{ collection.cover.url }}" alt="Collection cover">
+                        <span id="coverText" class="cover-text">Change cover</span>
+                    {% else %}
+                        <img id="coverPreview" class="item-info-cover" src="{% static 'img/plus.png' %}" alt="Choose cover">
+                        <span id="coverText" class="cover-text">Choose cover</span>
+                    {% endif %}
+                </div>
 
-        <label for="id_cover">Cover Image:</label>
-        <input type="file" name="cover" id="id_cover" value="{{ collection.cover.url }}">
+                <button id="removeButton" type="button" class="btn-primary">Remove cover</button>
+            </aside>
 
-        <label for="id_items">Items:</label>
-        <select name="reviews" id="id_items" multiple>
-            {% for review in all_reviews %}
-            	<option
-                        value="{{ review.id }}"
-                        {% if review.id in selected_review_ids %}
-                            selected="selected"
-                        {% endif %}
-                >{{ review.title }}</option>
-            {% endfor %}
-        </select>
+            <div class="item-info-content">
+                <h1 class="item-info-title">Update Collection</h1>
 
-        <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
-        <button type="submit">Save</button>
+                <label for="id_title">Title</label>
+                <input type="text" name="title" id="id_title" maxlength="127" value="{{ collection.title }}" required>
+
+                <label for="id_description">Description</label>
+                <textarea name="description" id="id_description">{{ collection.description }}</textarea>
+
+                <label for="item-search-input">Add Reviews</label>
+                <div class="item-search-wrapper">
+                    <input 
+                        type="text"
+                        id="item-search-input"
+                        placeholder="Search review by title..."
+                        autocomplete="off"
+                        data-user-id="{{ request.user.id }}"
+                    >
+                    <div id="item-search-container">
+                        <ul id="item-search-results"></ul>
+                    </div>
+                </div>
+
+                <div id="selectedReviews" class="selected-tags">
+                    {% for review in collection.reviews.all %}
+                        <span class="selected-tag" data-id="{{ review.id }}">
+                            {{ review.title }}
+                            <button type="button" class="remove-tag"></button>
+                        </span>
+                        <input type="hidden" name="reviews" value="{{ review.id }}">
+                    {% endfor %}
+                </div>
+                <div id="hiddenReviewsContainer">
+                    {% for review in collection.reviews.all %}
+                        <input type="hidden" name="reviews" value="{{ review.id }}" data-title="{{ review.title }}">
+                    {% endfor %}
+                </div>
+
+
+                <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
+                <div class="item-actions">
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
     </form>
 
-    <script src="{% static 'js/items/update_item.js' %}"></script>
+    <script src="{% static 'js/reviews/update.js' %}"></script>
+    <script src="{% static 'js/reviews/image_preview.js' %}"></script>
+    <script src="{% static 'js/review_collection/add_review_search.js' %}"></script>
 {% endblock %}

@@ -63,7 +63,10 @@ class ReviewUpdateDeleteAPIView(APIView):
             partial=True
         )
         if serializer.is_valid():
-            serializer.save(user=request.user)
+            if not request.data.get('tags'):
+                serializer.save(user=request.user, tags=[])
+            else:
+                serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -31,24 +31,26 @@
                     <span style="color: #666666">No description</span>
                 {% endif %}
             </div>
+            
+            <div class="item-footer">
+                <div class="item-info-meta">Posted by: {{ review.user }}</div>
     
-            <div class="item-info-meta">Posted by: {{ review.user }}</div>
-    
-            {% if review.user == request.user %}
-            <div class="item-actions">
-                <form
-                    id="deleteForm"
-                    data-url="{% url 'api:review-detail' review.id %}"
-                    data-redirect-url="{% url 'user_profile:user-profile' review.user.username %}"
-                >
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-                <a href="{% url 'reviews:update-review' review.id %}">Update</a>
+                {% if review.user == request.user %}
+                <div class="item-actions">
+                    <form
+                        id="deleteForm"
+                        data-url="{% url 'api:review-detail' review.id %}"
+                        data-redirect-url="{% url 'user_profile:user-profile' review.user.username %}"
+                    >
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                    <a href="{% url 'reviews:update-review' review.id %}">Update</a>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
 
-<script src="{% static 'js/items/delete_item.js' %}"></script>
+<script src="{% static 'js/reviews/delete.js' %}"></script>
 {% endblock %}

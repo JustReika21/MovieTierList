@@ -2,31 +2,64 @@
 {% load static %}
 {% block content %}
     <title>Create Collection</title>
+    
+    <link href="{% static 'css/reviews/review_create.css' %}" rel="stylesheet">
+    <link href="{% static 'css/review_collections/collection_create.css' %}" rel="stylesheet">
+
     <form
-            id="createForm"
-            action="{% url 'api:collection-list' %}"
-            data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
+        id="createForm"
+        action="{% url 'api:collection-list' %}"
+        method="post"
+        enctype="multipart/form-data"
+        data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
     >
         {% csrf_token %}
-        <label for="id_title">Title:</label>
-        <input type="text" name="title" id="id_title" maxlength="127" required>
+        <div class="item-info-container">
+            <aside class="item-info-cover-wrapper">
+                <input type="file" name="cover" id="id_cover" accept="image/*" hidden>
 
-        <label for="id_description">Description:</label>
-        <textarea name="description" id="id_description"></textarea>
+                <div class="cover-upload" id="coverUpload" role="button" tabindex="0" aria-label="Choose cover">
+                    <img id="coverPreview" class="item-info-cover" src="{% static 'img/plus.png' %}" alt="Choose cover">
+                    <span id="coverText" class="cover-text">Choose cover</span>
+                </div>
 
-        <label for="id_cover">Cover Image:</label>
-        <input type="file" name="cover" id="id_cover">
+                <button id="removeButton" type="button" class="btn-primary">Remove cover</button>
+            </aside>
 
-        <label for="id_items">Items:</label>
-        <select name="reviews" id="id_items" multiple>
-            {% for review in reviews %}
-                <option value="{{ review.id }}">{{ review.title }}</option>
-            {% endfor %}
-        </select>
+            <div class="item-info-content">
+                <h1 class="item-info-title">Create Collection</h1>
 
-        <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
-        <button type="submit">Save</button>
+                <label for="id_title">Title</label>
+                <input type="text" name="title" id="id_title" maxlength="127" required>
+
+                <label for="id_description">Description</label>
+                <textarea name="description" id="id_description"></textarea>
+
+                <label for="item-search-input">Add Reviews</label>
+                <div class="item-search-wrapper">
+                    <input 
+                          type="text"
+                          id="item-search-input"
+                          placeholder="Search review by title..."
+                          autocomplete="off"
+                          data-user-id="{{ request.user.id }}"
+                      >
+                    <div id="item-search-container">
+                        <ul id="item-search-results"></ul>
+                    </div>
+                </div>
+                <div id="selectedReviews" class="selected-tags"></div>
+                <div id="hiddenReviewsContainer"></div>
+
+                <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
+                <div class="item-actions">
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
     </form>
 
-    <script src="{% static 'js/items/create_item.js' %}"></script>
+    <script src="{% static 'js/reviews/create.js' %}"></script>
+    <script src="{% static 'js/reviews/image_preview.js' %}"></script>
+    <script src="{% static 'js/review_collection/add_review_search.js' %}"></script>
 {% endblock %}

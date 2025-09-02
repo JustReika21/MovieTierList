@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <title>About</title>
+    <link rel="stylesheet" href="{% static 'css/core/about.css' %}">
+
+    <section class="about-wrapper">
+        <h1 class="about-header">MovieTierList</h1>
+        <p class="subtitle">MTL – There are reviews for everything here.</p>
+
+        <div class="about-section">
+            <h3>About MovieTierList</h3>
+            <p>
+                MovieTierList is a platform where everyone can share reviews
+                about movies, serials, games, books, and much more.
+                Our goal is to create a space where opinions are valued and accessible to everyone.
+                <br>
+                Stack: Python, Django, Django Rest Framework, PostgreSQL, pytest, swagger, drf-spectacular, Docker, HTML, CSS, JavaScript
+                <br>
+                github: <a href="https://github.com/JustReika21/MovieTierList" class="github-link">MovieTierList</a>
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h3>Our Mission</h3>
+            <p>
+                To make reviews simple, honest, and available for all kinds of content —
+                from blockbuster films to indie projects and everything in between.
+            </p>
+        </div>
+
+        <h2 class="about-header">Our Team</h2>
+
+        <div class="about-team">
+            <a href="https://t.me/JustReika21" style="text-decoration: none">
+                <div class="team-member">
+                    <h4>Maxim Misyurin</h4>
+                    <p>Founder & Platform Architect</p>
+                </div>
+            </a>
+            <a href="https://t.me/JustReika21" style="text-decoration: none">
+                <div class="team-member">
+                    <h4>JustReika21</h4>
+                    <p>Main developer</p>
+                </div>
+            </a>
+            <a href="https://t.me/JustReika21" style="text-decoration: none">
+                <div class="team-member">
+                    <h4>Misyurin M.A.</h4>
+                    <p>Special thanks</p>
+                </div>
+            </a>
+        </div>
+    </section>
+{% endblock %}

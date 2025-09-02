@@ -9,4 +9,5 @@ handler500 = views.custom_handler500
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('about/', views.about, name='about'),
 ]

@@ -22,7 +22,7 @@ class TestCollectionsApi:
     @pytest.mark.parametrize('title, description', [
         ('A' * 128, 'Description'),
         ('', 'Description'),
-        ('Title', 'A' * 1025),
+        ('Title', 'A' * 2049),
     ])
     def test_01_create_collection_with_invalid_data(
             self, user, auth_user_client, fill_data_for_collection,
@@ -52,7 +52,7 @@ class TestCollectionsApi:
     @pytest.mark.parametrize('title, description', [
         ('Title', 'Description'),
         ('Название', 'Описание'),
-        ('А' * 127, 'A' * 1024),
+        ('А' * 127, 'A' * 2048),
         ('А', ''),
     ])
     def test_03_create_collection_with_valid_data(
@@ -106,7 +106,7 @@ class TestCollectionsApi:
         ('Updated', 'Review'),
         ('Title', 'Description'),
         ('Название', 'Описание'),
-        ('А' * 127, 'A' * 1024),
+        ('А' * 127, 'A' * 2048),
         ('А', ''),
     ])
     def test_05_update_collection_with_valid_data_by_creator(
@@ -160,7 +160,7 @@ class TestCollectionsApi:
     @pytest.mark.parametrize('title, description', [
         ('A' * 128, 'Description'),
         ('', 'Description'),
-        ('Title', 'A' * 1025),
+        ('Title', 'A' * 2049),
     ])
     def test_07_update_with_invalid_data(
             self, user, auth_user_client, create_collection,
@@ -278,3 +278,31 @@ class TestCollectionsApi:
             ),)
         assert response.status_code == 404, response.data
 
+    def test_15_update_collection_without_reviews(
+            self, user, auth_user_client, create_reviews,
+            fill_data_for_collection
+    ):
+        reviews = create_reviews(5, user)
+
+        data = fill_data_for_collection('title', 'description', reviews)
+        response = auth_user_client.post(
+            reverse('api:collection-list'),
+            data=data
+        )
+
+        assert response.status_code == 201, response.data
+
+        data = fill_data_for_collection(
+            'title', 'description', [],
+        )
+
+        response = auth_user_client.patch(
+            reverse(
+                'api:collection-detail',
+                kwargs={'collection_id': response.json()['id']}
+            ),
+            data=data
+        )
+
+        assert response.status_code == 200, response.data
+        assert response.json()['review_details'] == [], response.data

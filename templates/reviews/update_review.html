@@ -1,53 +1,83 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <title>Update review {{ review.title }}</title>
+    <link href="{% static 'css/reviews/review_create.css' %}" rel="stylesheet">
+    <title>Update Review {{ review.title }}</title>
+
     <form
-            id="createForm"
-            action="{% url 'api:review-detail' review.id %}"
-            data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
+        id="createForm"
+        action="{% url 'api:review-detail' review.id %}"
+        method="post"
+        enctype="multipart/form-data"
+        data-redirect-url="{% url 'user_profile:user-profile' request.user.username %}"
     >
         {% csrf_token %}
 
-        <label for="id_title">Title:</label>
-        <input type="text" name="title" id="id_title" maxlength="127" value="{{ review.title }}" required>
+        <div class="item-info-container">
+            <aside class="item-info-cover-wrapper">
+                <input type="file" name="cover" id="id_cover" accept="image/*" hidden>
 
-        <label for="id_description">Description:</label>
-        <textarea name="description" id="id_description">{{ review.description }}</textarea>
+                <div class="cover-upload" id="coverUpload" role="button" tabindex="0" aria-label="Choose cover">
+                    {% if review.cover %}
+                        <img id="coverPreview" class="item-info-cover" src="{{ review.cover.url }}" alt="Cover">
+                        <span id="coverText" class="cover-text">Change cover</span>
+                    {% else %}
+                        <img id="coverPreview" class="item-info-cover" src="{% static 'img/plus.png' %}" alt="Choose cover">
+                        <span id="coverText" class="cover-text">Choose cover</span>
+                    {% endif %}
+                </div>
 
-        <label for="id_rating">Rating:</label>
-        <select name="rating" id="id_rating" required>
-            {% for rating in ratings %}
+                <button id="removeButton" type="button" class="btn-primary" style="margin-top: auto">Remove cover</button>
+            </aside>
 
-                    <option
-                            value="{{ rating }}"
-                            {% if rating == review.rating %}
-                                selected="selected"
-                            {% endif %}
-                    >{{ rating }}</option>
+            <div class="item-info-content">
+                <h1 class="item-info-title">Update Review</h1>
 
-            {% endfor %}
-        </select>
+                <label for="id_title">Title</label>
+                <input type="text" name="title" id="id_title" maxlength="127" value="{{ review.title }}" required>
 
-        <label for="id_cover">Cover Image:</label>
-        <input type="file" name="cover" id="id_cover">
+                <label for="id_description">Description</label>
+                <textarea name="description" id="id_description">{{ review.description }}</textarea>
 
-        <label for="id_tags">Tags:</label>
-        <select name="tags" id="id_tags" multiple>
-            {% for tag in tags %}
-                <option
-                        value="{{ tag.id }}"
-                        {% if tag.id in selected_tag_id %}
-                        	    selected="selected"
-                        {% endif %}
-                >{{ tag.name }}</option>
-            {% endfor %}
-        </select>
+                <label for="id_rating">Rating</label>
+                <select name="rating" id="id_rating" required>
+                    {% for rating in ratings %}
+                        <option value="{{ rating }}" {% if rating == review.rating %}selected{% endif %}>{{ rating }}</option>
+                    {% endfor %}
+                </select>
 
-        <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
+                <label for="id_type">Type</label>
+                <select name="type" id="id_type" required>
+                    {% for type in types %}
+                        <option value="{{ type.id }}" {% if type.id == review.type.id %}selected{% endif %}>{{ type.name }}</option>
+                    {% endfor %}
+                </select>
 
-        <button type="submit">Save</button>
+                <label for="tagInput">Tags</label>
+                <div class="tag-input-wrapper">
+                    <input type="text" id="tagInput" placeholder="Type to search tags...">
+                    <div id="tagSuggestions" class="suggestions"></div>
+                </div>
+                <div id="selectedTags" class="selected-tags">
+                    {% for tag in review.tags.all %}
+                        <span class="selected-tag" data-id="{{ tag.id }}">{{ tag.name }}
+                            <button type="button" class="remove-tag"></button>
+                        </span>
+                        <input type="hidden" name="tags" value="{{ tag.id }}">
+                    {% endfor %}
+                </div>
+                <div id="hiddenTagsContainer"></div>
+
+                <input type="hidden" name="user" id="user" value="{{ request.user.id }}">
+
+                <div class="item-actions">
+                    <button type="submit" class="btn-primary" style="margin-top: auto;">Save</button>
+                </div>
+            </div>
+        </div>
     </form>
 
-    <script src="{% static 'js/items/update_item.js' %}"></script>
+    <script src="{% static 'js/reviews/update.js' %}"></script>
+    <script src="{% static 'js/reviews/image_preview.js' %}"></script>
+    <script src="{% static 'js/reviews/tag_search.js' %}"></script>
 {% endblock %}

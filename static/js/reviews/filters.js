@@ -1,5 +1,6 @@
 const tagInput = document.getElementById('tag-input');
 const ratingInput = document.getElementById('rating-input');
+const typeInput = document.getElementById('type-input');
 const suggestions = document.getElementById('suggestions');
 const searchBtn = document.getElementById('search-btn');
 const resetBtn = document.getElementById('reset-btn');
@@ -49,32 +50,34 @@ document.addEventListener('click', (e) => {
   }
 });
 
-searchBtn.addEventListener('click', () => {
-  const tagValue = tagInput.value.trim();
-  const ratingValue = ratingInput.value.trim();
+function updateFilters() {
   const params = new URLSearchParams(window.location.search);
+  params.delete('page'); // reset pagination on new search
 
-  params.delete('page');
+  const filters = {
+    tag_filter: tagInput.value.trim(),
+    rating_filter: ratingInput.value.trim(),
+    type_filter: typeInput.value.trim(),
+  };
 
-  if (tagValue) {
-    params.set('tag_filter', tagValue);
-  } else {
-    params.delete('tag_filter');
-  }
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+  });
 
-  if (ratingValue) {
-    params.set('rating_filter', ratingValue);
-  } else {
-    params.delete('rating_filter');
-  }
+  return params;
+}
 
+searchBtn.addEventListener('click', () => {
+  const params = updateFilters();
   window.location.search = params.toString() ? `?${params.toString()}` : '';
 });
 
 resetBtn.addEventListener('click', () => {
   const params = new URLSearchParams(window.location.search);
-  params.delete('tag_filter');
-  params.delete('rating_filter');
-  params.delete('page');
+  ['tag_filter', 'rating_filter', 'type_filter', 'page'].forEach((key) => params.delete(key));
   window.location.search = params.toString();
 });

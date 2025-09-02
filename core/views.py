@@ -5,6 +5,10 @@ def home(request):
     return render(request, 'core/index.html')
 
 
+def about(request):
+    return render(request, 'core/about.html')
+
+
 def custom_handler403(request, *args, **kwargs):
     return render(request, 'core/403.html', status=403)
 

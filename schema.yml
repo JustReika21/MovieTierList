@@ -33,7 +33,7 @@ paths:
           description: ''
         '400':
           description: Validation Error
-  /api/v1/collections/{collection_id}:
+  /api/v1/collections/{collection_id}/:
     patch:
       operationId: v1_collections_partial_update
       parameters:
@@ -207,9 +207,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReviewSearch'
           description: ''
-  /api/v1/tags/get/:
+  /api/v1/tags/:
     get:
-      operationId: v1_tags_get_list
+      operationId: v1_tags_list
       parameters:
       - in: query
         name: query
@@ -262,7 +262,6 @@ components:
           type: integer
           readOnly: true
       required:
-      - cover
       - id
       - review_details
       - reviews
@@ -315,6 +314,9 @@ components:
         cover:
           type: string
           format: uri
+        type:
+          type: integer
+          nullable: true
         tags:
           type: array
           items:
@@ -365,6 +367,9 @@ components:
         cover:
           type: string
           format: uri
+        type:
+          type: integer
+          nullable: true
         tags:
           type: array
           items:

@@ -1,0 +1,56 @@
+.welcome {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 70vh;
+  padding: 20px;
+}
+
+.welcome-text h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.welcome-text p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #ccc;
+}
+
+.welcome-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1;
+  padding: 8px 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #555;
+}
+
+
+@media (max-width: 768px) {
+  .welcome-text h1 {
+    font-size: 2.2rem;
+  }
+
+  .welcome-text p {
+    font-size: 1rem;
+  }
+
+  .btn {
+    width: 80%;
+    text-align: center;
+  }
+}

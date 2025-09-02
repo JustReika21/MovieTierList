@@ -20,7 +20,7 @@ class TestReviewsAPI:
     @pytest.mark.parametrize('title, description, rating', [
         ('A' * 128, 'Description', 5),
         ('', 'Description', 5),
-        ('Title', 'A' * 1025, 5),
+        ('Title', 'A' * 2049, 5),
         ('Title', 'Description', 0),
         ('Title', 'Description', 11),
     ])
@@ -50,7 +50,7 @@ class TestReviewsAPI:
     @pytest.mark.parametrize('title, description, rating', [
         ('Title', 'Description', 10),
         ('Название', 'Описание', 1),
-        ('А' * 127, 'A' * 1024, 5),
+        ('А' * 127, 'A' * 2048, 5),
         ('А', '', 5),
     ])
     def test_03_create_review_with_valid_data(
@@ -106,7 +106,7 @@ class TestReviewsAPI:
         ('Updated', 'Review', 10,),
         ('Title', 'Description', 10),
         ('Название', 'Описание', 1),
-        ('А' * 127, 'A' * 1024, 5),
+        ('А' * 127, 'A' * 2048, 5),
         ('А', '', 5),
     ])
     def test_05_update_review_with_valid_data_by_creator(
@@ -161,7 +161,7 @@ class TestReviewsAPI:
     @pytest.mark.parametrize('title, description, rating', [
         ('A' * 128, 'Description', 5),
         ('', 'Description', 5),
-        ('Title', 'A' * 1025, 5),
+        ('Title', 'A' * 2049, 5),
         ('Title', 'Description', 0),
         ('Title', 'Description', 11),
     ])
@@ -267,7 +267,6 @@ class TestReviewsAPI:
         )
         assert response.status_code == 404, response.data
 
-    
     def test_14_get_review_tags_by_query(self, auth_user_client, create_tag):
         tag1 = create_tag('Created')
         tag2 = create_tag('USO')
@@ -332,3 +331,28 @@ class TestReviewsAPI:
 
         assert response.status_code == 200, response.data
         assert len(response.json()) == 1
+
+    def test_19_update_review_without_tags(
+            self, user, auth_user_client, create_review, create_tags,
+            create_type, fill_data_for_review
+    ):
+        tags = create_tags(5)
+        data = fill_data_for_review('title', 'description', 5, tags)
+        response = auth_user_client.post(reverse('api:review-list'), data=data)
+
+        assert response.status_code == 201, response.data
+
+        data = fill_data_for_review(
+            'title', 'description', 5, [],
+        )
+
+        response = auth_user_client.patch(
+            reverse(
+                'api:review-detail',
+                kwargs={'review_id': response.json()['id']}
+            ),
+            data=data
+        )
+
+        assert response.status_code == 200, response.data
+        assert response.json()['tags'] == []

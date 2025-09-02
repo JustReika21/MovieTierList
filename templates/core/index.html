@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-    <title>Home</title>
-    <h1>Hello world!</h1>
+    <link href="{% static 'css/core/index.css' %}" rel="stylesheet">
+    <title>MovieTierList</title>
+
+    <section class="welcome">
+        <div class="welcome-text">
+            <h1>MovieTierList</h1>
+            <p>MTL – There are reviews for everything here.</p>
+            {% if request.user.is_authenticated %}
+                <div class="welcome-buttons">
+                    <a href="{% url 'user_profile:user-profile' request.user.username %}" class="btn">Profile</a>
+                    <a href="{% url 'reviews:all-reviews' request.user.username %}" class="btn">Reviews</a>
+                    <a href="{% url 'review_collections:all-collections' request.user.username %}" class="btn">Collections</a>
+                </div>
+            {% else %}
+                <div class="welcome-buttons">
+                    <a href="{% url 'accounts:login' %}" class="btn">Login</a>
+                    <a href="{% url 'accounts:signin' %}" class="btn">Signin</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+
 {% endblock %}

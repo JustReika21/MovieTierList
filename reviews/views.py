@@ -74,10 +74,12 @@ def update_review(request, review_id):
         )
 
     tags = get_tags()
+    types = get_types()
     selected_tag_id = get_selected_tags_ids(review)
     context = {
         'review': review,
         'tags': tags,
+        'types': types,
         'selected_tag_id': selected_tag_id,
         'ratings': (i for i in range(1, 11))
     }
