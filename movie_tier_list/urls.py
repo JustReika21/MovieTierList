@@ -1,6 +1,9 @@
 from django.contrib import admin
-from django.urls import path, include
-from django.conf.urls.static import static
+from django.urls import path, include, re_path
+from django.conf.urls.static import (
+    serve as static_serve,
+    static
+)
 
 from debug_toolbar.toolbar import debug_toolbar_urls
 
@@ -26,6 +29,11 @@ urlpatterns = [
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
-if settings.DEBUG:
+if not settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^static/(?P<path>.*)$', static_serve, {'document_root': settings.STATIC_ROOT}),
+        re_path(r'^media/(?P<path>.*)$', static_serve, {'document_root': settings.MEDIA_ROOT}),
+    ]
+else:
     urlpatterns += debug_toolbar_urls()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

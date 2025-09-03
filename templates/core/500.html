@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'css/core/index.css' %}" rel="stylesheet">
+    <title>Server Error</title>
+
+    <section class="welcome">
+        <div class="welcome-text">
+            <h1>500</h1>
+            <p>Something went wrong on our side. Please try again later.</p>
+            <div class="welcome-buttons">
+                <a href="{% url 'core:index' %}" class="btn">Home</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

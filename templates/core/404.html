@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'css/core/index.css' %}" rel="stylesheet">
+    <title>Page Not Found</title>
+
+    <section class="welcome">
+        <div class="welcome-text">
+            <h1>404</h1>
+            <p>Page not found – but don’t worry, you can go back.</p>
+            <div class="welcome-buttons">
+                <a href="{% url 'core:index' %}" class="btn">Home</a>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

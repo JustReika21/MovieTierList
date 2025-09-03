@@ -27,6 +27,13 @@
   position: relative;
 }
 
+.filter-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
 input[type="text"],
 input[type="number"] {
   width: 100%;
@@ -36,6 +43,43 @@ input[type="number"] {
   color: #fff;
   border: 1px solid #444;
   border-radius: 6px;
+}
+
+.filter-group select#type-input {
+  width: 100%;
+  padding: 8px 36px 8px 10px;
+  font-size: 0.95rem;
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23cccccc' d='M1.41 0L6 4.58 10.59 0 12 1.41 6 7.41 0 1.41z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-group select#type-input:hover {
+  border-color: #555;
+}
+
+.filter-group select#type-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.filter-group select#type-input::-ms-expand {
+  display: none;
+}
+
+.filter-group select#type-input option {
+  background-color: #1e1e1e;
+  color: #fff;
 }
 
 #suggestions {
@@ -174,5 +218,8 @@ input[type="number"] {
   .filters-panel,
   .items-panel {
     flex: 1 1 100%;
+  }
+  .filter-group select#type-input {
+    font-size: 1rem;
   }
 }

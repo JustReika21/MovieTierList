@@ -22,7 +22,7 @@
 
 .item-info-cover-wrapper img.item-info-cover {
     width: 100%;
-    height: 600px; /* фиксированная высота картинки */
+    height: 600px;
     object-fit: cover;
     display: block;
     border-radius: 8px;
@@ -119,7 +119,6 @@
     background-color: #555;
 }
 
-/* Адаптив */
 @media (max-width: 1024px) {
     .item-info-container {
         flex-direction: column;

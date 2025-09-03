@@ -1,7 +1,6 @@
 DJANGO_SECRET_KEY=some_django_secret_key
 DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
 DJANGO_CSRF_TRUSTED_ORIGINS=http://localhost:8000,http://your_domain,
-DJANGO_DEBUG=False
 
 DATABASE_ENGINE=django.db.backends.postgresql
 DATABASE_NAME=db_name

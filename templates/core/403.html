@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'css/core/index.css' %}" rel="stylesheet">
+    <title>Forbidden</title>
+
+    <section class="welcome">
+        <div class="welcome-text">
+            <h1>403</h1>
+            <p>You don’t have permission to access this page.</p>
+            <div class="welcome-buttons">
+                <a href="{% url 'core:index' %}" class="btn">Home</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
